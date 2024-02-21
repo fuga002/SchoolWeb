@@ -25,6 +25,7 @@ public class SchoolDbContext:DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Subject> Subjects { get; set; }
     public DbSet<UserSubject> UsersSubjects { get; set; }
+    public DbSet<SubjectRequest> SubjectRequests { get; set; }
     public DbSet<Role> Roles { get; set; }
     public DbSet<Task> Tasks { get; set; }
     public DbSet<TaskResponse> TaskResponses { get; set; }

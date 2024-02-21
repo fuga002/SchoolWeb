@@ -1,14 +1,20 @@
 ﻿namespace SchoolData.StaticServices;
 
-public class StaticNames
+public static class StaticNames
 {
-    public static string ResponsePending = "Pending";
-    public static string ResponseAccepted = "Accepted";
-    public static string ResponseDeclined = "Declined";
-    public static string ResponseGraded = "Graded";
-    public static string TaskContinues = "Continues";
-    public static string TaskFinished = "Finished";
-    public static string SubjectPending = "Pending";
-    public static string SubjectApproved = "Approved";
-    public static string SubjectDeclined = "Declined";
+    public const string ResponsePending = "Pending";
+    public const string ResponseAccepted = "Accepted";
+    public const string ResponseDeclined = "Declined";
+    public const string ResponseGraded = "Graded";
+
+    public const string TaskContinues = "Continues";
+    public const string TaskFinished = "Finished";
+
+    public const string SubjectPending = "Pending";
+    public const string SubjectApproved = "Approved";
+    public const string SubjectDeclined = "Declined";
+
+    public const string StudentRole = "Student";
+    public const string TeacherRole = "Teacher";
+    public const string AdminRole = "Admin";
 }

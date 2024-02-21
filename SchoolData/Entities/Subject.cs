@@ -13,8 +13,12 @@ public class Subject
     public string SubjectDescription { get; set; }
     public List<Task>? Tasks { get; set; }
 
-    public int UserId { get; set; }
-    public User? User { get; set; }
+    public int TeacherId { get; set; }
+
+    public string? SubjectPhotoUrl { get; set; }
+
+
+    public List<SubjectRequest> Requests { get; set; }
 
     public List<UserSubject>? UserSubjects { get; set; }
 }

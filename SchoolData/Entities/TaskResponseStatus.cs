@@ -9,4 +9,7 @@ public class TaskResponseStatus
 
     [Required]
     public string Status { get; set; }
+
+    public Guid UserId { get; set; }
+    public int TaskId { get; set; }
 }

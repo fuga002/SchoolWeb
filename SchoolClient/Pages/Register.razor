@@ -1,0 +1,108 @@
+﻿@page "/register"
+@using SchoolData.Models
+@using System.Text.Json
+@using Newtonsoft.Json
+@using System.Text
+
+<h3 class="text-center mb-4">Register User</h3>
+
+
+
+<div class="container">
+    <div class="title">Registration</div>
+    <div class="content">
+        <form action="#">
+            <EditForm Model="@userModel" OnValidSubmit="HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <div class="user-details">
+                <div class="input-box">
+                    <label class="details" for="firstname">First Name</label>
+                    <InputText id="firstname" class="form-control" @bind-Value="userModel.Firstname"/>
+                    <ValidationMessage For="@(() => userModel.Firstname)"/>
+                </div>
+                <div class="input-box">
+                    <label class="details" for="lastname">Last Name</label>
+                    <InputText id="lastname" class="form-control" @bind-Value="userModel.Lastname"/>
+                    <ValidationMessage For="@(() => userModel.Lastname)"/>
+                </div>
+                <div class="input-box">
+                    <label class="details" for="username">Username</label>
+                    <InputText id="username" class="form-control" @bind-Value="userModel.Username"/>
+                    <ValidationMessage For="@(() => userModel.Username)"/>
+                </div>
+                <div class="input-box">
+                    <label class="details" for="password">Password</label>
+                    <InputText id="password" class="form-control" type="password" @bind-Value="userModel.Password"/>
+                    <ValidationMessage For="@(() => userModel.Password)"/>
+                </div>
+                <div class="input-box">
+                    <label class="details" for="confirmPassword">Confirm Password</label>
+                    <InputText id="confirmPassword" class="form-control" type="password" @bind-Value="userModel.ConfirmPassword"/>
+                    <ValidationMessage For="@(() => userModel.ConfirmPassword)"/>
+                </div>
+                <div class="input-box">
+                    <label class="details" for="bornDate">Date of Birth</label>
+                    <InputText id="bornDate" class="form-control" @bind-Value="userModel.BornDate"/>
+                    <ValidationMessage For="@(() => userModel.BornDate)"/>
+                </div>
+                <div class="input-box">
+                    <label for="userRole">User Role</label>
+                    <InputSelect id="userRole" class="form-control" @bind-Value="userModel.UserRole">
+                        <option value="Admin">Admin</option>
+                        <option value="User">User</option>
+                    </InputSelect>
+                    <ValidationMessage For="@(() => userModel.UserRole)"/>
+                </div>
+            </div>
+            <div class="gender-details">
+                <input type="radio" name="gender" id="dot-1">
+                <input type="radio" name="gender" id="dot-2">
+                <input type="radio" name="gender" id="dot-3">
+                <span class="gender-title">Gender</span>
+                <div class="category">
+                    <label for="dot-1">
+                        <span class="dot one"></span>
+                        <span class="gender">Male</span>
+                    </label>
+                    <label for="dot-2">
+                        <span class="dot two"></span>
+                        <span class="gender">Female</span>
+                    </label>
+                    <label for="dot-3">
+                        <span class="dot three"></span>
+                        <span class="gender">Prefer not to say</span>
+                    </label>
+                </div>
+            </div>
+            <div class="button">
+                <input type="submit" value="Register">
+            </div>
+            </EditForm>
+        </form>
+    </div>
+</div>
+
+@code {
+    private CreateUserModel userModel = new CreateUserModel();
+
+    private async Task HandleValidSubmit()
+    {
+
+
+        using var httpClient = new HttpClient();
+        var jsonContent = new StringContent(JsonConvert.SerializeObject(userModel), Encoding.UTF8, "application/json");
+        var response = await httpClient.PostAsync("http://localhost:5087/api/users/register", jsonContent);
+        //Check if the request was successful
+        if (response.IsSuccessStatusCode)
+        {
+            // Registration successful, handle accordingly
+            Console.WriteLine("Registration successful!");
+        }
+        else
+        {
+            // Registration failed, handle accordingly
+            Console.WriteLine($"Registration failed with status code {response.StatusCode}");
+        }
+    }
+}
+}
