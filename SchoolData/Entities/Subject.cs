@@ -13,7 +13,7 @@ public class Subject
     public string SubjectDescription { get; set; }
     public List<Task>? Tasks { get; set; }
 
-    public int TeacherId { get; set; }
+    public List<Guid> TeacherIds { get; set; }
 
     public string? SubjectPhotoUrl { get; set; }
 

@@ -41,6 +41,19 @@ public class UserSubjectManager
 
     public async Task UpdateUserSubject(CreateUserSubjectModel model)
     {
-        var userSubject = await _subjectRepository.GetSubjectById()
+        var userSubject = await _subjectRepository.GetSubjectByIds(model.UserId, model.SubjectId);
+        if (userSubject is null)
+            throw new UserSubjectNotFoundException();
+
+        userSubject.SubjectStatus = model.SubjectStatus;
+        await _subjectRepository.UpdateUserSubject(userSubject);
+    }
+
+    public async Task DeleteUserSubject(Guid userId, int subjectId)
+    {
+        var userSubject = await _subjectRepository.GetSubjectByIds(userId, subjectId);
+        if (userSubject is null)
+            throw new UserSubjectNotFoundException();
+        await _subjectRepository.DeleteUserSubject(userSubject);
     }
 }

@@ -26,4 +26,8 @@
     <ProjectReference Include="..\SchoolData\SchoolData.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Photos\" />
+  </ItemGroup>
+
 </Project>

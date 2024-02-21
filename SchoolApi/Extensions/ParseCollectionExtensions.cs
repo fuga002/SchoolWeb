@@ -2,6 +2,7 @@
 using SchoolData.Models;
 using SchoolData.Models.SubjectModels;
 using SchoolData.Models.TaskModels;
+using System.Threading.Tasks;
 using Task = SchoolData.Entities.Task;
 
 namespace SchoolApi.Extensions;
@@ -29,12 +30,17 @@ public static class ParseCollectionExtensions
             Id = subject.Id,
             SubjectName = subject.SubjectName,
             SubjectDescription = subject.SubjectDescription,
-            TeacherId = subject.TeacherId,
+            TeacherIds = subject.TeacherIds,
             SubjectPhotoUrl = subject.SubjectPhotoUrl,
             Tasks = ParseList(subject.Tasks!),
             UserSubjects = ParseList(subject.UserSubjects!),
             Requests = ParseList(subject.Requests)
         };
+    }
+
+    public static List<SubjectModelByAdmin> ParseList(List<Subject> subjects)
+    {
+        return subjects.Select(subject => subject.ParseModel()).ToList();
     }
 
     public static TaskModel ParseModel(this Task task)

@@ -9,7 +9,7 @@ public class SubjectModelByAdmin
     public string SubjectName { get; set; }
     public string SubjectDescription { get; set; }
 
-    public int TeacherId { get; set; }
+    public List<Guid> TeacherIds { get; set; }
 
     public string? SubjectPhotoUrl { get; set; }
     public List<TaskModel>? Tasks { get; set; }
