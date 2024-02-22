@@ -3,6 +3,20 @@
 @using SchoolData.Models.TaskModels
 @using System.Text.Json
 @inject HttpService HttpService
+@code {
+    [Parameter]
+    public string item { get; set; }
+    List<TaskModel> taskModels = new List<TaskModel>();
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        var subjectId = JsonSerializer.Deserialize<int>(Uri.UnescapeDataString(item));
+        if (firstRender)
+        {
+            taskModels = await HttpService.GetEntitiesFromApi<TaskModel>("https://localhost:7251/api/Tasks", subjectId);
+        }
+        StateHasChanged();
+    }
+}
 <div>
     <header class="header">
         <h2 class="header_title">Lorem ipsum dolor sit.</h2>
@@ -34,16 +48,4 @@
     </main>
 </div>
 
-@code {
-    [Parameter]
-    public string item { get; set; }
-    List<TaskModel> taskModels = new List<TaskModel>();
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        var subjectId = JsonSerializer.Deserialize<int>(Uri.UnescapeDataString(item));
-        if (firstRender)
-        {
-            taskModels = await HttpService.GetEntitiesFromApi<TaskModel>("https://localhost:7251/api/Tasks");
-        }
-    }
-}
+

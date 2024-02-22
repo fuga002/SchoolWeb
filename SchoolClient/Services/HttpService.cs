@@ -51,9 +51,10 @@ public  class HttpService
         using var httpClient = new HttpClient();
         var request = new HttpRequestMessage(HttpMethod.Get, apiUrl);
         request.Headers.Add("Authorization",await AuthorizeApiRequest());
-        if (obj != null)
+        if (obj is int)
         {
-            request.Content = new StringContent(JsonConvert.SerializeObject(obj), Encoding.UTF8, "application/json");
+           request =  new HttpRequestMessage(HttpMethod.Get, apiUrl+$"/{Convert.ToInt32(obj)}");
+           request.Headers.Add("Authorization", await AuthorizeApiRequest());
         }
         HttpResponseMessage response = await httpClient.SendAsync(request);
         response.EnsureSuccessStatusCode(); 

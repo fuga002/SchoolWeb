@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using SchoolApi.Exceptions;
 using SchoolApi.Extensions;
+using SchoolApi.Services;
 using SchoolApi.Services.Interfaces;
 using SchoolData.Entities;
 using SchoolData.Models;
 using SchoolData.StaticServices;
+using Task = System.Threading.Tasks.Task;
 
 namespace SchoolApi.Managers;
 
@@ -34,7 +36,8 @@ public class UserManager
             LastName = model.Lastname,
             UserName = model.Username,
             BornDate = model.BornDate,
-            UserRole = await _roleRepository.IsExistRole(model.UserRole) ? model.UserRole : StaticNames.StudentRole
+            UserRole = await _roleRepository.IsExistRole(model.UserRole) ? model.UserRole : StaticNames.StudentRole,
+            PhotoUrl = "/Photos/user.png"
         };
 
         user.PasswordHash = new PasswordHasher<User>().HashPassword(user,model.Password);
@@ -87,6 +90,14 @@ public class UserManager
             user.UserRole = await _roleRepository.IsExistRole(model.UserRole)
                 ? model.UserRole
                 : user.UserRole;
+        await _userRepository.UpdateUser(user);
+        return user.ParseModel();
+    }
+
+    public async Task<UserModel> UpdatePhoto(Guid userId,IFormFile file)
+    {
+        var user = await _userRepository.GetUserById(userId);
+        user.PhotoUrl = await FileService.SaveFile(file);
         await _userRepository.UpdateUser(user);
         return user.ParseModel();
     }

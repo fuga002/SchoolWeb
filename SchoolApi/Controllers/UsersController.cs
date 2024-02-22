@@ -95,5 +95,21 @@ public class UsersController : ControllerBase
         }
 
     }
+
+    [HttpPut("updateDetails/{userId}")]
+    public async Task<IActionResult> UpdateUserDetails(UpdateUserModel model)
+    {
+        var userId = _userProvider.UserId;
+        var user = await _userManager.UpdateUser(model, userId);
+        return Ok(user);
+    }
+
+    [HttpPut("updatePhoto/{userId}")]
+    public async Task<IActionResult> UpdateUserPhoto([FromBody] IFormFile file)
+    {
+        var userId = _userProvider.UserId;
+        var user = await _userManager.UpdatePhoto(userId, file);
+        return Ok(user);
+    }
 }
 

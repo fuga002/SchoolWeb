@@ -230,3 +230,9 @@ a, .btn-link {
     border-radius: 55px;
     margin: 10px 0px;
 }
+.image-part {
+    width: 100px;
+    height: 100px;
+    border: 1px solid black;
+    border-radius: 50%;
+}
