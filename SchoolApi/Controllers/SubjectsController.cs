@@ -25,7 +25,7 @@ public class SubjectsController : ControllerBase
         return Ok(await _subjectManager.GetAllSubjectsByAdmin());
     }
 
-    [HttpGet("/{subjectId}")]
+    [HttpGet("getSubject/{subjectId}")]
     public async Task<IActionResult> GetSubjectById(int subjectId)
     {
         return Ok(await _subjectManager.GetSubjectByAdmin(subjectId));

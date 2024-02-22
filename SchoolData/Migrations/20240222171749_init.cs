@@ -36,7 +36,9 @@ namespace SchoolData.Migrations
                     SubjectName = table.Column<string>(type: "text", nullable: false),
                     SubjectDescription = table.Column<string>(type: "text", nullable: false),
                     TeacherIds = table.Column<List<Guid>>(type: "uuid[]", nullable: false),
-                    SubjectPhotoUrl = table.Column<string>(type: "text", nullable: true)
+                    SubjectPhotoUrl = table.Column<string>(type: "text", nullable: true),
+                    TotalGrade = table.Column<float>(type: "real", nullable: false),
+                    TotalGetGrade = table.Column<float>(type: "real", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -86,8 +88,8 @@ namespace SchoolData.Migrations
                     TaskTitle = table.Column<string>(type: "text", nullable: false),
                     TaskDescription = table.Column<string>(type: "text", nullable: false),
                     TaskStatus = table.Column<string>(type: "text", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    StartDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    EndDate = table.Column<DateOnly>(type: "date", nullable: false),
                     MaxGrade = table.Column<float>(type: "real", nullable: false),
                     SubjectId = table.Column<int>(type: "integer", nullable: false)
                 },

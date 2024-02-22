@@ -1,8 +1,8 @@
-﻿using SchoolData.Entities;
+﻿using Mapster;
+using SchoolData.Entities;
 using SchoolData.Models;
 using SchoolData.Models.SubjectModels;
 using SchoolData.Models.TaskModels;
-using System.Threading.Tasks;
 using Task = SchoolData.Entities.Task;
 
 namespace SchoolApi.Extensions;
@@ -11,40 +11,17 @@ public static class ParseCollectionExtensions
 {
     public static UserModel ParseModel(this User user)
     {
-        return new UserModel()
-        {
-            UserId = user.Id,
-            Firstname = user.FirstName,
-            Lastname = user.LastName,
-            Username = user.UserName,
-            UserRole = user.UserRole,
-            BornDate = user.BornDate,
-            CreateDateTime = user.CreatedDateTime
-        };
+        return user.Adapt<UserModel>();
     }
 
     public static SubjectModelByAdmin ParseModel(this Subject? subject)
     {
-        if (subject == null)
-        {
-            return new SubjectModelByAdmin();
-        }
-        return new SubjectModelByAdmin()
-        {
-            Id = subject.Id,
-            SubjectName = subject.SubjectName,
-            SubjectDescription = subject.SubjectDescription,
-            TeacherIds = subject.TeacherIds,
-            SubjectPhotoUrl = subject.SubjectPhotoUrl,
-            Tasks = ParseList(subject.Tasks!),
-            UserSubjects = ParseList(subject.UserSubjects!),
-            Requests = ParseList(subject.Requests)
-        };
+        return subject.Adapt<SubjectModelByAdmin>();
     }
 
     public static List<SubjectModelByAdmin> ParseList(List<Subject>? subjects)
     {
-        if (subjects == null)
+        if (subjects == null || subjects.Count == 0)
         {
             return new List<SubjectModelByAdmin>();
         }
@@ -53,25 +30,12 @@ public static class ParseCollectionExtensions
 
     public static TaskModel ParseModel(this Task task)
     {
-        return new TaskModel()
-        {
-            Id = task.Id,
-            TaskTitle = task.TaskTitle,
-            TaskDescription = task.TaskDescription,
-            TaskStatus = task.TaskStatus,
-            TaskResponses = ParseList(task.TaskResponses!),
-            StartDate = task.StartDate,
-            EndDate = task.EndDate,
-            MaxGrade = task.MaxGrade,
-            EndDayOfGrade = task.EndDayOfGrade,
-            SubjectId = task.SubjectId,
-            Subject = task.Subject!.ParseModel()
-        };
+        return task.Adapt<TaskModel>();
     }
 
     public static List<TaskModel> ParseList(List<Task>? tasks)
     {
-        if (tasks == null)
+        if (tasks == null || tasks.Count == 0)
         {
             return new List<TaskModel>();
         }
@@ -80,20 +44,12 @@ public static class ParseCollectionExtensions
 
     public static UserSubjectModel ParseModel(this UserSubject subject)
     {
-        return new UserSubjectModel()
-        {
-            Id = subject.Id,
-            SubjectStatus = subject.SubjectStatus,
-            SubjectId = subject.SubjectId,
-            Subject = subject.Subject!.ParseModel(),
-            UserId = subject.UserId,
-            User = subject.User!.ParseModel()
-        };
+        return subject.Adapt<UserSubjectModel>();
     }
 
     public static List<UserSubjectModel> ParseList(List<UserSubject>? userSubjects)
     {
-        if (userSubjects == null)
+        if (userSubjects == null || userSubjects.Count == 0)
         {
             return new List<UserSubjectModel>();
         }
@@ -102,39 +58,21 @@ public static class ParseCollectionExtensions
 
     public static SubjectRequestModel ParseModel(this SubjectRequest subject)
     {
-        return new SubjectRequestModel()
-        {
-            Id = subject.Id,
-            Text = subject.Text,
-            UserId = subject.UserId,
-            User = subject.User.ParseModel(),
-            SubjectId = subject.SubjectId,
-            Subject = subject.Subject.ParseModel()
-        };
+        return subject.Adapt<SubjectRequestModel>();
     }
 
-    public static List<SubjectRequestModel> ParseList(List<SubjectRequest> requests)
+    public static List<SubjectRequestModel> ParseList(List<SubjectRequest>? requests)
     {
-        if (requests == null )
+        if (requests == null || requests.Count == 0)
         {
             return new List<SubjectRequestModel>();
         }
         return requests.Select(request => request.ParseModel()).ToList();
     }
 
-    public static TaskResponseModel ParseModel(this TaskResponse taskResponse)
+    public static TaskResponseModel ParseModel(this TaskResponse? taskResponse)
     {
-        return new TaskResponseModel()
-        {
-            Id = taskResponse.Id,
-            ResponseFilePath = taskResponse.ResponseFilePath,
-            ResponseText = taskResponse.ResponseText,
-            CreatedAt = taskResponse.CreatedAt,
-            UserId = taskResponse.UserId,
-            User = taskResponse.User!.ParseModel(),
-            TaskId = taskResponse.TaskId,
-            Task = taskResponse.Task!.ParseModel()
-        };
+        return taskResponse.Adapt<TaskResponseModel>();
     }
 
     public static List<TaskResponseModel> ParseList(List<TaskResponse>? responses)

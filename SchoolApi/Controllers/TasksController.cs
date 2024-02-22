@@ -16,7 +16,7 @@ public class TasksController : ControllerBase
         _taskManager = taskManager;
     }
 
-    [HttpGet]
+    [HttpGet()]
     public async Task<IActionResult> GetAllTasks(int subjectId)
     {
         try

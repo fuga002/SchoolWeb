@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using SchoolApi.Extensions;
@@ -7,8 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddControllers().AddJsonOptions(x =>
+    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -35,7 +36,8 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
-AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true); 
+
 builder.Services.AddDbContext<SchoolDbContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("SchoolDb"));

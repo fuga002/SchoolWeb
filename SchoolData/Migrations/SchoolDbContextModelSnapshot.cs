@@ -69,6 +69,12 @@ namespace SchoolData.Migrations
                         .IsRequired()
                         .HasColumnType("uuid[]");
 
+                    b.Property<float>("TotalGetGrade")
+                        .HasColumnType("real");
+
+                    b.Property<float>("TotalGrade")
+                        .HasColumnType("real");
+
                     b.HasKey("Id");
 
                     b.ToTable("Subjects");

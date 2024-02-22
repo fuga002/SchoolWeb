@@ -19,5 +19,4 @@ public class TaskModel
     public DateOnly EndDayOfGrade;
 
     public int SubjectId { get; set; }
-    public SubjectModelByAdmin? Subject { get; set; }
 }

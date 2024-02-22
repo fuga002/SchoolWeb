@@ -1,0 +1,49 @@
+﻿@page "/subjectDetails/{item}"
+@using SchoolClient.Services
+@using SchoolData.Models.TaskModels
+@using System.Text.Json
+@inject HttpService HttpService
+<div>
+    <header class="header">
+        <h2 class="header_title">Lorem ipsum dolor sit.</h2>
+        <div><i class="fa-solid fa-arrow-left-long header_icon"></i></div>
+    </header>
+    <main class="main">
+        @if (taskModels.Count != 0)
+        {
+            <div class="main_card">
+                @foreach (var task in taskModels)
+                {
+                    <div class="main_card_left">
+                        <h4 class="main_title">@task.TaskTitle</h4>
+                        <p class="main_text">@task.TaskDescription</p>
+                        <button class="card_button">Kirish</button>
+                    </div>
+                    <div class="main_card_right">
+                        <h4 class="main_start_date">start : @task.StartDate</h4>
+                        <h4 class="main_stop_date">deadline :@task.EndDate</h4>
+                        <h4 class="main_max_grade">max_grade : @task.MaxGrade</h4>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <h3><b>There is no any task!</b></h3>
+        }
+    </main>
+</div>
+
+@code {
+    [Parameter]
+    public string item { get; set; }
+    List<TaskModel> taskModels = new List<TaskModel>();
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        var subjectId = JsonSerializer.Deserialize<int>(Uri.UnescapeDataString(item));
+        if (firstRender)
+        {
+            taskModels = await HttpService.GetEntitiesFromApi<TaskModel>("https://localhost:7251/api/Tasks");
+        }
+    }
+}

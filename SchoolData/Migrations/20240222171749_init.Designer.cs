@@ -13,8 +13,8 @@ using SchoolData.Contexts;
 namespace SchoolData.Migrations
 {
     [DbContext(typeof(SchoolDbContext))]
-    [Migration("20240222094626_init4")]
-    partial class init4
+    [Migration("20240222171749_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -71,6 +71,12 @@ namespace SchoolData.Migrations
                     b.Property<List<Guid>>("TeacherIds")
                         .IsRequired()
                         .HasColumnType("uuid[]");
+
+                    b.Property<float>("TotalGetGrade")
+                        .HasColumnType("real");
+
+                    b.Property<float>("TotalGrade")
+                        .HasColumnType("real");
 
                     b.HasKey("Id");
 

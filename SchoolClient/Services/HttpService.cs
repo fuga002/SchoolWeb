@@ -1,6 +1,4 @@
 ﻿using Newtonsoft.Json;
-using SchoolData.Models.SubjectModels;
-using System.Net.Http.Headers;
 using SchoolData.Models;
 using Newtonsoft.Json.Linq;
 using System.Text;
@@ -48,16 +46,20 @@ public  class HttpService
             return Guid.Empty; 
         }
     }
-    public   async Task<List<SubjectModelByAdmin>> GetEntitiesFromApi(string apiUrl)
+    public   async Task<List<T>> GetEntitiesFromApi<T>(string apiUrl,object? obj = null)
     {
         using var httpClient = new HttpClient();
         var request = new HttpRequestMessage(HttpMethod.Get, apiUrl);
         request.Headers.Add("Authorization",await AuthorizeApiRequest());
+        if (obj != null)
+        {
+            request.Content = new StringContent(JsonConvert.SerializeObject(obj), Encoding.UTF8, "application/json");
+        }
         HttpResponseMessage response = await httpClient.SendAsync(request);
         response.EnsureSuccessStatusCode(); 
 
         string responseBody = await response.Content.ReadAsStringAsync();
-        List<SubjectModelByAdmin> entities = JsonConvert.DeserializeObject<List<SubjectModelByAdmin>>(responseBody) ?? new List<SubjectModelByAdmin>();
+        List<T> entities = JsonConvert.DeserializeObject<List<T>>(responseBody) ?? new List<T>();
         Console.WriteLine(response.StatusCode);
         return entities;
     }
@@ -114,7 +116,7 @@ public  class HttpService
         string responseBody = await response.Content.ReadAsStringAsync();
         UserModel entity = JsonConvert.DeserializeObject<UserModel>(responseBody) ?? new UserModel();
         Console.WriteLine(response.StatusCode);
-        await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "userId", entity.UserId);
+        await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "userId", entity.Id);
         return entity;
     }
 }

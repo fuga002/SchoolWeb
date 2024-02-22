@@ -180,3 +180,53 @@ a, .btn-link {
     color: white;
     margin: 5px auto;
 }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.header {
+    background-color: #fff;
+    margin: 50px 30px;
+    padding: 20px 50px;
+    -webkit-box-shadow: 4px 4px 100px 12px rgba(34, 60, 80, 0.2);
+    -moz-box-shadow: 4px 4px 100px 12px rgba(34, 60, 80, 0.2);
+    box-shadow: 4px 4px 100px 12px rgba(34, 60, 80, 0.2);
+}
+
+.header_title {
+    text-align: center;
+}
+
+.main_card {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: #fff;
+    padding: 10px 50px;
+    margin: 30px 30px;
+    -webkit-box-shadow: 4px 4px 100px 12px rgba(34, 60, 80, 0.2);
+    -moz-box-shadow: 4px 4px 100px 12px rgba(34, 60, 80, 0.2);
+    box-shadow: 4px 4px 100px 12px rgba(34, 60, 80, 0.2);
+}
+
+.main_start_date {
+    color: greenyellow;
+}
+
+.main_stop_date {
+    color: red;
+}
+
+.main_max_grade {
+    color: rgba(0, 0, 255, 0.558);
+}
+
+.card_button {
+    padding: 5px 20px;
+    background-color: greenyellow;
+    color: white;
+    border-radius: 55px;
+    margin: 10px 0px;
+}
