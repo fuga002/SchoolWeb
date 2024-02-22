@@ -17,6 +17,7 @@
         if (firstRender)
         { // Ensure component re-renders after getting token
             subjects = await HttpService.GetEntitiesFromApi("https://localhost:7251/api/Subjects");
+            tasks = await HttpService.GetRelatedTasks("https://localhost:7251/api/Subjects/getRelatedTasks");
             StateHasChanged();
             Console.WriteLine(subjects.Count);
         }

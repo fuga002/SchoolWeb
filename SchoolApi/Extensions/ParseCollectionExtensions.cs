@@ -23,8 +23,12 @@ public static class ParseCollectionExtensions
         };
     }
 
-    public static SubjectModelByAdmin ParseModel(this Subject subject)
+    public static SubjectModelByAdmin ParseModel(this Subject? subject)
     {
+        if (subject == null)
+        {
+            return new SubjectModelByAdmin();
+        }
         return new SubjectModelByAdmin()
         {
             Id = subject.Id,
@@ -135,7 +139,7 @@ public static class ParseCollectionExtensions
 
     public static List<TaskResponseModel> ParseList(List<TaskResponse>? responses)
     {
-        if (responses == null)
+        if (responses == null || responses.Count == 0)
         {
             return new List<TaskResponseModel>();
         }

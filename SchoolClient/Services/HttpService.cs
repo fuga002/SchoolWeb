@@ -65,8 +65,9 @@ public  class HttpService
     public async Task<List<TaskModel>> GetRelatedTasks(string apiUrl)
     {
         using var httpClient = new HttpClient();
-        var request = new HttpRequestMessage(HttpMethod.Post, apiUrl); 
-        var jsonContent = new StringContent(JsonConvert.SerializeObject(await GetUserId()), Encoding.UTF8, "application/json");
+        var userId =await GetUserId();
+        var request = new HttpRequestMessage(HttpMethod.Post, apiUrl+$"/{userId}"); 
+        var jsonContent = new StringContent(JsonConvert.SerializeObject(userId), Encoding.UTF8, "application/json");
         request.Content = jsonContent;
         request.Headers.Add("Authorization", await AuthorizeApiRequest());
         HttpResponseMessage response = await httpClient.SendAsync(request);

@@ -17,6 +17,9 @@ public class Subject
 
     public string? SubjectPhotoUrl { get; set; }
 
+    public float TotalGrade { get; set; } = 0;
+    public float TotalGetGrade { get; set; } = 0;
+
 
     public virtual List<SubjectRequest> Requests { get; set; }
 
