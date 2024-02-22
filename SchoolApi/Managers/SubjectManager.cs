@@ -3,6 +3,7 @@ using SchoolApi.Services;
 using SchoolApi.Services.Interfaces;
 using SchoolData.Entities;
 using SchoolData.Models.SubjectModels;
+using SchoolData.Models.TaskModels;
 using Task = System.Threading.Tasks.Task;
 
 namespace SchoolApi.Managers;
@@ -40,7 +41,7 @@ namespace SchoolApi.Managers;
                 //at least, default photo is needed to set up !
 
             };
-            await _subjectRepository.DeleteSubject(subject);
+            await _subjectRepository.AddSubject(subject);
             return subject.ParseModel();
         }
 

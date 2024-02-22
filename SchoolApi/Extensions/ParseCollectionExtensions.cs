@@ -38,8 +38,12 @@ public static class ParseCollectionExtensions
         };
     }
 
-    public static List<SubjectModelByAdmin> ParseList(List<Subject> subjects)
+    public static List<SubjectModelByAdmin> ParseList(List<Subject>? subjects)
     {
+        if (subjects == null)
+        {
+            return new List<SubjectModelByAdmin>();
+        }
         return subjects.Select(subject => subject.ParseModel()).ToList();
     }
 
@@ -61,8 +65,12 @@ public static class ParseCollectionExtensions
         };
     }
 
-    public static List<TaskModel> ParseList(List<Task> tasks)
+    public static List<TaskModel> ParseList(List<Task>? tasks)
     {
+        if (tasks == null)
+        {
+            return new List<TaskModel>();
+        }
         return tasks.Select(task => task.ParseModel()).ToList();
     }
 
@@ -79,8 +87,12 @@ public static class ParseCollectionExtensions
         };
     }
 
-    public static List<UserSubjectModel> ParseList(List<UserSubject> userSubjects)
+    public static List<UserSubjectModel> ParseList(List<UserSubject>? userSubjects)
     {
+        if (userSubjects == null)
+        {
+            return new List<UserSubjectModel>();
+        }
         return userSubjects.Select(userSubject => userSubject.ParseModel()).ToList();
     }
 
@@ -99,6 +111,10 @@ public static class ParseCollectionExtensions
 
     public static List<SubjectRequestModel> ParseList(List<SubjectRequest> requests)
     {
+        if (requests == null )
+        {
+            return new List<SubjectRequestModel>();
+        }
         return requests.Select(request => request.ParseModel()).ToList();
     }
 
@@ -117,8 +133,12 @@ public static class ParseCollectionExtensions
         };
     }
 
-    public static List<TaskResponseModel> ParseList(List<TaskResponse> responses)
+    public static List<TaskResponseModel> ParseList(List<TaskResponse>? responses)
     {
+        if (responses == null)
+        {
+            return new List<TaskResponseModel>();
+        }
         return responses.Select(response => response.ParseModel()).ToList();
     }
 

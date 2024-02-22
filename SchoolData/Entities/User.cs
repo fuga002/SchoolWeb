@@ -21,6 +21,6 @@ public class User
     public string UserRole { get; set; }
     public DateTime CreatedDateTime { get; set; } = DateTime.Now;
 
-    public List<SubjectRequest> Requests { get; set; }
-    public List<UserSubject>? UserSubjects { get; set; }
+    public virtual List<SubjectRequest> Requests { get; set; }
+    public virtual List<UserSubject>? UserSubjects { get; set; }
 }

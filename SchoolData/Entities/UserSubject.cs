@@ -11,7 +11,7 @@ public class UserSubject
     public string SubjectStatus { get; set; }
 
     public Guid UserId { get; set; }
-    public User? User { get; set; }
+    public virtual User? User { get; set; }
     public int SubjectId { get; set; }
-    public Subject? Subject { get; set; }
+    public virtual Subject? Subject { get; set; }
 }

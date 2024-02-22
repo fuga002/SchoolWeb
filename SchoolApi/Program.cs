@@ -1,10 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using SchoolApi.Extensions;
-using SchoolApi.Managers;
-using SchoolApi.Providers;
-using SchoolApi.Services;
-using SchoolApi.Services.Interfaces;
 using SchoolData.Contexts;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -44,11 +40,6 @@ builder.Services.AddDbContext<SchoolDbContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("SchoolDb"));
 });
-
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<ISubjectRepository, SubjectRepository>();
-builder.Services.AddScoped<IRoleRepository, RoleRepository>();
-builder.Services.AddScoped<UserProvider>();
 builder.Services.AddIdentity(builder.Configuration);
 
 var app = builder.Build();

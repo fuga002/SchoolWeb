@@ -1,0 +1,47 @@
+﻿@page "/login"
+@using SchoolData.Models
+@using SchoolClient.Services
+@inject HttpService HttpService
+
+
+<h3 class="text-center mb-4">Register User</h3>
+
+
+
+<div class="container">
+    <div class="title">Registration</div>
+    <div class="content">
+        <form action="#">
+            <EditForm Model="@userModel" OnValidSubmit="HandleValidSubmit">
+                <DataAnnotationsValidator />
+                <div class="user-details">
+                    <div class="input-box">
+                        <label class="details" for="firstname">UserName</label>
+                        <InputText id="firstname" class="form-control" @bind-Value="userModel.Username" />
+                        <ValidationMessage For="@(() => userModel.Username)" />
+                    </div>
+                    <div class="input-box">
+                        <label class="details" for="lastname">Password</label>
+                        <InputText id="lastname" class="form-control" @bind-Value="userModel.Password" />
+                        <ValidationMessage For="@(() => userModel.Password)" />
+                    </div>
+                </div>
+                <div class="button">
+                    <input type="submit" value="Register">
+                </div>
+            </EditForm>
+        </form>
+    </div>
+</div>
+
+
+@code {
+    private LoginUserModel userModel = new LoginUserModel();
+
+    private async Task HandleValidSubmit()
+    {
+        await HttpService.LogIn("https://localhost:7251/api/Users/login", userModel);
+    }
+}
+}
+

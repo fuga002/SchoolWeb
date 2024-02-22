@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SchoolData.Entities;
-using System;
 using Task = SchoolData.Entities.Task;
 
 namespace SchoolData.Contexts;
@@ -21,7 +20,10 @@ public class SchoolDbContext:DbContext
             UserName = "fuga_02"
         });*/
     }
-
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseLazyLoadingProxies();
+    }
     public DbSet<User> Users { get; set; }
     public DbSet<Subject> Subjects { get; set; }
     public DbSet<UserSubject> UsersSubjects { get; set; }

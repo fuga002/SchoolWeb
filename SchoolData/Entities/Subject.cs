@@ -11,14 +11,14 @@ public class Subject
     public string SubjectName { get; set; }
     [Required]
     public string SubjectDescription { get; set; }
-    public List<Task>? Tasks { get; set; }
+    public virtual List<Task>? Tasks { get; set; }
 
     public List<Guid> TeacherIds { get; set; }
 
     public string? SubjectPhotoUrl { get; set; }
 
 
-    public List<SubjectRequest> Requests { get; set; }
+    public virtual List<SubjectRequest> Requests { get; set; }
 
-    public List<UserSubject>? UserSubjects { get; set; }
+    public virtual List<UserSubject>? UserSubjects { get; set; }
 }

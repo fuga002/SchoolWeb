@@ -12,9 +12,9 @@ public class TaskResponseResult
 
     [ForeignKey("UserId")]
     public Guid UserId { get; set; }
-    public User? User { get; set; }
+    public virtual User? User { get; set; }
 
     [ForeignKey("TaskId")]
     public int TaskId { get; set; }
-    public Task? Task { get; set; }
+    public virtual Task? Task { get; set; }
 }

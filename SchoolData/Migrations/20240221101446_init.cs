@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -24,6 +25,22 @@ namespace SchoolData.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Roles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Subjects",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    SubjectName = table.Column<string>(type: "text", nullable: false),
+                    SubjectDescription = table.Column<string>(type: "text", nullable: false),
+                    TeacherIds = table.Column<List<Guid>>(type: "uuid[]", nullable: false),
+                    SubjectPhotoUrl = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Subjects", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -61,24 +78,26 @@ namespace SchoolData.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Subjects",
+                name: "Tasks",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    SubjectName = table.Column<string>(type: "text", nullable: false),
-                    SubjectDescription = table.Column<string>(type: "text", nullable: false),
-                    TeacherId = table.Column<int>(type: "integer", nullable: false),
-                    SubjectPhotoUrl = table.Column<string>(type: "text", nullable: true),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false)
+                    TaskTitle = table.Column<string>(type: "text", nullable: false),
+                    TaskDescription = table.Column<string>(type: "text", nullable: false),
+                    TaskStatus = table.Column<string>(type: "text", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    MaxGrade = table.Column<float>(type: "real", nullable: false),
+                    SubjectId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Subjects", x => x.Id);
+                    table.PrimaryKey("PK_Tasks", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Subjects_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
+                        name: "FK_Tasks_Subjects_SubjectId",
+                        column: x => x.SubjectId,
+                        principalTable: "Subjects",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -106,31 +125,6 @@ namespace SchoolData.Migrations
                         name: "FK_SubjectRequests_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Tasks",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    TaskTitle = table.Column<string>(type: "text", nullable: false),
-                    TaskDescription = table.Column<string>(type: "text", nullable: false),
-                    TaskStatus = table.Column<string>(type: "text", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    MaxGrade = table.Column<float>(type: "real", nullable: false),
-                    SubjectId = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Tasks", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Tasks_Subjects_SubjectId",
-                        column: x => x.SubjectId,
-                        principalTable: "Subjects",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -171,7 +165,7 @@ namespace SchoolData.Migrations
                     ResponseFilePath = table.Column<string>(type: "text", nullable: true),
                     ResponseText = table.Column<string>(type: "text", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    Status = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<string>(type: "text", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     TaskId = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -227,11 +221,6 @@ namespace SchoolData.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_SubjectRequests_UserId",
                 table: "SubjectRequests",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Subjects_UserId",
-                table: "Subjects",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -295,10 +284,10 @@ namespace SchoolData.Migrations
                 name: "Tasks");
 
             migrationBuilder.DropTable(
-                name: "Subjects");
+                name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Subjects");
         }
     }
 }

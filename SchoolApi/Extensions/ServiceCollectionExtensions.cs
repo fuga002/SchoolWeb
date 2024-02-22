@@ -2,6 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SchoolApi.Managers;
+using SchoolApi.Providers;
+using SchoolApi.Services.Interfaces;
+using SchoolApi.Services;
 using SchoolData.Contexts;
 using SchoolData.Options;
 
@@ -34,10 +37,25 @@ public static  class ServiceCollectionExtensions
 
     public static void AddIdentity(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddJwt(configuration);
+        services.AddJwt(configuration); 
+
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<ISubjectRepository, SubjectRepository>();
+        services.AddScoped<ISubjectRequestRepository, SubjectRequestRepository>();
+        services.AddScoped<IUserSubjectRepository, UserSubjectRepository>();
+        services.AddScoped<IRoleRepository, RoleRepository>();
+        services.AddScoped<ITaskRepository, TaskRepository>();
+
+        services.AddScoped<SubjectManager>();
+        services.AddScoped<SubjectRequestManager>();
         services.AddScoped<JwtTokenManager>();
         services.AddScoped<UserManager>();
+        services.AddScoped<TaskManager>();
+
+        services.AddScoped<UserProvider>();
+
         services.AddHttpContextAccessor();
+        
     }
 
 

@@ -13,16 +13,16 @@ public class Task
     [Required]
     public string TaskStatus { get; set; }
 
-    public List<TaskResponse>? TaskResponses { get; set; }
+    public virtual List<TaskResponse>? TaskResponses { get; set; }
 
-    public DateTime StartDate { get; set; }
-    public DateTime EndDate { get; set; }
+    public DateOnly StartDate { get; set; }
+    public DateOnly EndDate { get; set; }
 
     [Required]
     public float MaxGrade { get; set; }
 
-    public DateTime EndDayOfGrade => EndDate.AddDays(3);
+    public DateOnly EndDayOfGrade ;
 
     public int SubjectId { get; set; }
-    public Subject? Subject { get; set; }
+    public virtual Subject? Subject { get; set; }
 }
