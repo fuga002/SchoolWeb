@@ -40,7 +40,8 @@
 
     private async Task HandleValidSubmit()
     {
-        await HttpService.LogIn("https://localhost:7251/api/Users/login", userModel);
+        var user = await HttpService.LogIn("https://localhost:7251/api/Users/login", userModel);
+
     }
 }
 }

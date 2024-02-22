@@ -71,7 +71,7 @@ public  class HttpService
     }
 
 
-    public  async Task LogIn(string apiUrl, LoginUserModel entityToSend)
+    public  async Task<UserModel> LogIn(string apiUrl, LoginUserModel entityToSend)
     {
 
         using var httpClient = new HttpClient();
@@ -90,13 +90,14 @@ public  class HttpService
         }
 
         await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "token", token);
-
+        var userModel =  await GetProfile();
+        return userModel;
     }
 
-    public async Task<UserModel> GetProfile(string apiUrl)
+    public async Task<UserModel> GetProfile()
     {
         using var httpClient = new HttpClient();
-        var request = new HttpRequestMessage(HttpMethod.Post, apiUrl);
+        var request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:7251/api/Users/profile");
         var jsonContent = new StringContent(JsonConvert.SerializeObject(await GetUserId()), Encoding.UTF8, "application/json");
         request.Content = jsonContent;
         request.Headers.Add("Authorization", await AuthorizeApiRequest());
@@ -106,7 +107,7 @@ public  class HttpService
         string responseBody = await response.Content.ReadAsStringAsync();
         UserModel entity = JsonConvert.DeserializeObject<UserModel>(responseBody) ?? new UserModel();
         Console.WriteLine(response.StatusCode);
-        await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "userId", entity);
+        await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "userId", entity.UserId);
         return entity;
     }
 }

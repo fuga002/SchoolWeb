@@ -1,0 +1,16 @@
+﻿@page "/profile"
+@using SchoolData.Models
+@using SchoolClient.Services
+@inject HttpService HttpService
+<h3>Profile</h3>
+
+@code {
+    UserModel _userModel = new UserModel();
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _userModel = await HttpService.GetProfile();
+        }
+    }
+}
