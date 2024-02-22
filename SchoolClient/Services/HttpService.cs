@@ -37,8 +37,16 @@ public  class HttpService
 
     public async Task<Guid> GetUserId()
     {
-        Guid userId = await _jsRuntime.InvokeAsync<Guid>("localStorage", "userId");
-        return userId;
+        string userIdString = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", "userId");
+
+        if (!string.IsNullOrEmpty(userIdString) && Guid.TryParse(userIdString, out Guid userId))
+        {
+            return userId;
+        }
+        else
+        {
+            return Guid.Empty; 
+        }
     }
     public   async Task<List<SubjectModelByAdmin>> GetEntitiesFromApi(string apiUrl)
     {
@@ -97,9 +105,7 @@ public  class HttpService
     public async Task<UserModel> GetProfile()
     {
         using var httpClient = new HttpClient();
-        var request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:7251/api/Users/profile");
-        var jsonContent = new StringContent(JsonConvert.SerializeObject(await GetUserId()), Encoding.UTF8, "application/json");
-        request.Content = jsonContent;
+        var request = new HttpRequestMessage(HttpMethod.Get, "https://localhost:7251/api/Users/profile");
         request.Headers.Add("Authorization", await AuthorizeApiRequest());
         HttpResponseMessage response = await httpClient.SendAsync(request);
         response.EnsureSuccessStatusCode();
