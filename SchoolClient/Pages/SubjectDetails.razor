@@ -3,6 +3,7 @@
 @using SchoolData.Models.TaskModels
 @using System.Text.Json
 @using SchoolData.Models.SubjectModels
+@using System.Security.Claims
 @using SchoolData.StaticServices
 @inject HttpService HttpService
 @code {
@@ -10,14 +11,15 @@
     public string item { get; set; }
     List<TaskModel> taskModels = new List<TaskModel>();
     SubjectModelByAdmin subject = new SubjectModelByAdmin();
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    TaskResponseModel response = new TaskResponseModel();
+    Guid userId;
+    bool check = false;
+    protected override async Task OnInitializedAsync()
     {
         var subjectId = JsonSerializer.Deserialize<int>(Uri.UnescapeDataString(item));
-        if (firstRender)
-        {
-            taskModels = await HttpService.GetEntitiesFromApi<TaskModel>("https://localhost:7251/api/Tasks", subjectId);
-            subject = await HttpService.GetEntityFromApi<SubjectModelByAdmin>("https://localhost:7251/api/Subjects/getSubject", subjectId);
-        }
+        taskModels = await HttpService.GetEntitiesFromApi<TaskModel>("https://localhost:7251/api/Tasks", subjectId);
+        subject = await HttpService.GetEntityFromApi<SubjectModelByAdmin>("https://localhost:7251/api/Subjects/getSubject", subjectId);
+        userId = await HttpService.GetUserId();
         StateHasChanged();
     }
 }
@@ -43,13 +45,33 @@
                                 @task.TaskDescription
                             </CardText>
                             <CardText>
-                               <strong>Start date :</strong>  @task.StartDate.ToString("dd/MM/yyyy");
+                                <strong>Start date :</strong>  @task.StartDate.ToString("dd/MM/yyyy");
                                 <br/>
                                 <strong>End date  : </strong> @task.EndDate.ToString("dd/MM/yyyy");
                             </CardText>
-                            <Button Color="Color.Primary" Margin="Margin.Is2.FromTop">
-                                <Button Color="Color.Primary" Clicked="() => ShowCreateModal(task)">Response Task</Button><Icon Name="IconName.ArrowRight" />
-                            </Button>
+                            @if (task.TaskResponses?.Any(x => x.UserId == userId) ?? false)
+                            {
+
+                                @switch (task.TaskResponses?.FirstOrDefault(x => x.UserId == userId)?.Status)
+                                {
+                                    case StaticNames.ResponsePending:
+                                    {
+                                        <Badge Color="Color.Secondary">StaticNames.ResponsePending</Badge>
+                                        break;
+                                    }
+                                    case StaticNames.ResponseDeclined:
+                                    {
+                                            <Badge Color="Color.Danger">StaticNames.ResponseDeclined</Badge>
+                                        break;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                <Button Color="Color.Primary" Margin="Margin.Is2.FromTop">
+                                    <Button Color="Color.Primary" Clicked="() => ShowCreateModal(task)">Response Task</Button><Icon Name="IconName.ArrowRight" />
+                                </Button>
+                            }
                         </CardBody>
                     </Card>
                 }

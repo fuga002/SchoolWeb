@@ -41,10 +41,7 @@ public class HttpService
         {
             return userId;
         }
-        else
-        {
-            return Guid.Empty;
-        }
+        return Guid.Empty;
     }
 
     public async Task<List<T>> GetEntitiesFromApi<T>(string apiUrl, object? obj = null)

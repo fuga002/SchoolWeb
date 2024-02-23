@@ -71,7 +71,7 @@
             </ModalHeader>
             <ModalBody>
                 <Field>
-                    <Select TValue="string" bind-SelectedValue="_updateTaskResponseStatus.Status">
+                    <Select TValue="string" @bind-SelectedValue="@_updateTaskResponseStatus.Status">
                         <SelectItem Value="@StaticNames.ResponseAccepted">@StaticNames.ResponseAccepted</SelectItem>
                         <SelectItem Value="@StaticNames.ResponseDeclined">@StaticNames.ResponseDeclined</SelectItem>
                     </Select>
