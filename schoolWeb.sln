@@ -9,6 +9,29 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchoolData", "SchoolData\Sc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchoolApi", "SchoolApi\SchoolApi.csproj", "{9D3C461C-BAD0-4C3E-89E0-53FEA9FCCBE5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9283A815-7917-45BE-82E7-44D7A25B33AA}"
+	ProjectSection(SolutionItems) = preProject
+		C:\Users\maruf\Downloads\img 10.png = C:\Users\maruf\Downloads\img 10.png
+		C:\Users\maruf\Downloads\img 11.png = C:\Users\maruf\Downloads\img 11.png
+		C:\Users\maruf\Downloads\img 12.png = C:\Users\maruf\Downloads\img 12.png
+		C:\Users\maruf\Downloads\img 13.png = C:\Users\maruf\Downloads\img 13.png
+		C:\Users\maruf\Downloads\img 14.png = C:\Users\maruf\Downloads\img 14.png
+		C:\Users\maruf\Downloads\img 15.png = C:\Users\maruf\Downloads\img 15.png
+		C:\Users\maruf\Downloads\img 16.png = C:\Users\maruf\Downloads\img 16.png
+		C:\Users\maruf\Downloads\img 17.png = C:\Users\maruf\Downloads\img 17.png
+		C:\Users\maruf\Downloads\img 18.png = C:\Users\maruf\Downloads\img 18.png
+		C:\Users\maruf\Downloads\img 7.png = C:\Users\maruf\Downloads\img 7.png
+		C:\Users\maruf\Downloads\img 8.png = C:\Users\maruf\Downloads\img 8.png
+		C:\Users\maruf\Downloads\img 9.png = C:\Users\maruf\Downloads\img 9.png
+		C:\Users\maruf\Downloads\img1.png = C:\Users\maruf\Downloads\img1.png
+		C:\Users\maruf\Downloads\img2.png = C:\Users\maruf\Downloads\img2.png
+		C:\Users\maruf\Downloads\img3.png = C:\Users\maruf\Downloads\img3.png
+		C:\Users\maruf\Downloads\img4.png = C:\Users\maruf\Downloads\img4.png
+		C:\Users\maruf\Downloads\img5.png = C:\Users\maruf\Downloads\img5.png
+		C:\Users\maruf\Downloads\img6.png = C:\Users\maruf\Downloads\img6.png
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
