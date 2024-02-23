@@ -25,7 +25,7 @@ Welcome to the School project! This project aims to provide a comprehensive syst
 ### Dashboard
 ![Dashboard]
 Student actions
-(img1.png)
+![Image Alt Text](img1.png)
 (img2.png)
 (img3.png)
 (img4.png)
