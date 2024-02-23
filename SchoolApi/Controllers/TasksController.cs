@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SchoolApi.Attributes;
 using SchoolApi.Exceptions;
 using SchoolApi.Managers;
 using SchoolData.Models.TaskModels;
@@ -16,6 +17,7 @@ public class TasksController : ControllerBase
         _taskManager = taskManager;
     }
 
+    [CustomAuthorize("Admin", "Teacher", "Student")]
     [HttpGet()]
     public async Task<IActionResult> GetAllTasks(int subjectId)
     {
@@ -30,6 +32,7 @@ public class TasksController : ControllerBase
         }
     }
 
+    [CustomAuthorize("Admin", "Teacher", "Student")]
     [HttpGet("/{taskId}")]
     public async Task<IActionResult> GetTaskById(int subjectId, int taskId)
     {
@@ -44,6 +47,7 @@ public class TasksController : ControllerBase
         }
     }
 
+    [CustomAuthorize("Admin", "Teacher")]
     [HttpPost]
     public async Task<IActionResult> AddTask(int subjectId, [FromBody]  CreateTaskModel model)
     {
@@ -51,6 +55,7 @@ public class TasksController : ControllerBase
         return Ok(task);
     }
 
+    [CustomAuthorize("Admin", "Teacher")]
     [HttpPut]
     public async Task<IActionResult> UpdateTask(int subjectId, [FromBody] UpdateTaskModel model)
     {
@@ -65,6 +70,7 @@ public class TasksController : ControllerBase
         }
     }
 
+    [CustomAuthorize("Admin", "Teacher")]
     [HttpPut("/updateDate")]
     public async Task<IActionResult> UpdateTaskEndDate(int subjectId, int taskId, [FromBody] UpdateTaskDateModel model)
     {
@@ -79,6 +85,7 @@ public class TasksController : ControllerBase
         }
     }
 
+    [CustomAuthorize("Admin", "Teacher")]
     [HttpDelete]
     public async Task<IActionResult> DeleteTask(int subjectId, int taskId)
     {

@@ -1,4 +1,27 @@
-﻿@inject NavigationManager NavigationManager
+﻿@using SchoolClient.Services
+@using System.Security.Claims
+@using SchoolClient.Pages
+@using SchoolData.StaticServices
+@inject NavigationManager NavigationManager
+@inject HttpService HttpService
+
+@code{
+
+    string? userRole;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var claims = await HttpService.GetClaims();
+            var role = claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)!.Value;
+            userRole = await HttpService.GetUserRole();
+            StateHasChanged();
+
+        }
+    }
+
+}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -29,13 +52,50 @@
                 <img class="image-part" src="https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png" alt="">
                 <p>user</p>
             </div>
-            <!-- linklar yoziiladi  -->
-            <div class="button-container">
-                    <button class="btn btn-primary" @onclick="() => Navigate(Home)">Home</button>
-                <br/>
-                    <button class="btn btn-primary" @onclick="() => Navigate(SubjectManager)">Subject Manager</button>
+            @switch (userRole)
+            {
+                case StaticNames.StudentRole:
+                {
+                    <div class="button-container">
+                        <button class="btn btn-primary" @onclick="() => Navigate(Home)">Home</button>
+                        <br/>
+                        <button class="btn btn-primary" @onclick="() => Navigate(Subjects)">Subjects</button>
                 
-            </div>
+                    </div>
+                    break;
+                }
+                case StaticNames.TeacherRole:
+                {
+                    <div class="button-container">
+                        <button class="btn btn-primary" @onclick="() => Navigate(Home)">Home</button>
+                        <br/>
+                        <button class="btn btn-primary" @onclick="() => Navigate(SubjectManager)">Subject Manager</button>
+                    </div>
+                    break;
+                }
+                case StaticNames.AdminRole:
+                {
+                    <div class="button-container">
+                        <button class="btn btn-primary" @onclick="() => Navigate(Home)">Home</button>
+                        <br/>
+                        <button class="btn btn-primary" @onclick="() => Navigate(SubjectManager)">Subject Manager</button>
+                        <br/>
+                        <button class="btn btn-primary" @onclick="() => Navigate(Register)">Register Account</button>
+                
+                    </div>
+                    break;
+                }
+                default:
+                {
+                            <div class="button-container">
+                                <button class="btn btn-primary" @onclick="() => Navigate(Home)">Home</button>
+                                <br />
+                                <button class="btn btn-primary" @onclick="() => Navigate(Subjects)">Subjects</button>
+
+                            </div>
+                            break;
+                }
+            }
             
 
         </div>
@@ -50,6 +110,9 @@
 {
     private const string Home = "";
     private const string SubjectManager = "subjectManager";
+    private const string Subjects = "Subjects";
+    private const string Register = "register";
+
     private void Navigate(string url)
     {
         NavigationManager.NavigateTo($"/{url}");

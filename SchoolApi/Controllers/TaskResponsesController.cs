@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SchoolApi.Attributes;
 using SchoolApi.Exceptions;
 using SchoolApi.Managers;
 using SchoolApi.Providers;
@@ -18,13 +19,14 @@ public class TaskResponsesController : ControllerBase
         _taskResponseManager = taskResponseManager;
         _userProvider = userProvider;
     }
-
+    [CustomAuthorize("Admin", "Teacher", "Student")]
     [HttpGet("{taskId}")]
     public async Task<IActionResult> GetAllTaskResponse(int taskId)
     {
         return Ok(await _taskResponseManager.GetAllTaskResponse(taskId));
     }
 
+    [CustomAuthorize("Admin", "Teacher", "Student")]
     [HttpGet("{taskResponseId}")]
     public async Task<IActionResult> GetTaskResponseById(int taskId, int taskResponseId)
     {
@@ -38,6 +40,7 @@ public class TaskResponsesController : ControllerBase
         }
     }
 
+    [CustomAuthorize("Admin", "Teacher", "Student")]
     [HttpPost]
     public async Task<IActionResult> AddTaskResponse(CreateTaskResponseModel model)
     {
@@ -45,12 +48,14 @@ public class TaskResponsesController : ControllerBase
         return Ok(await _taskResponseManager.AddTaskResponse(model, userId));
     }
 
+    [CustomAuthorize("Admin", "Teacher")]
     [HttpPut]
     public async Task<IActionResult> UpdateTaskResponseStatus(UpdateTaskResponseStatus model)
     {
         return Ok(await _taskResponseManager.UpdateTaskResponseStatusByAdmin(model));
     }
 
+    [CustomAuthorize("Admin")]
     [HttpDelete("{takResponseId}")]
     public async Task<IActionResult> DeleteTaskResponseId(int taskId, int taskResponseId)
     {

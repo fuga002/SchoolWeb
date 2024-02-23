@@ -1,11 +1,10 @@
 using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
-using SchoolClient.Data;
 using SchoolClient.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddHttpContextAccessor();
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor(); 
@@ -14,8 +13,6 @@ builder.Services.AddBlazorise(options =>
     })
     .AddBootstrapProviders()
     .AddFontAwesomeIcons();
-builder.Services.AddSingleton<WeatherForecastService>();
-builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<HttpService>();
 builder.Services.AddHttpClient();
 builder.Services

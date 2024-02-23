@@ -14,13 +14,16 @@
     TaskResponseModel response = new TaskResponseModel();
     Guid userId;
     bool check = false;
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        var subjectId = JsonSerializer.Deserialize<int>(Uri.UnescapeDataString(item));
-        taskModels = await HttpService.GetEntitiesFromApi<TaskModel>("https://localhost:7251/api/Tasks", subjectId);
-        subject = await HttpService.GetEntityFromApi<SubjectModelByAdmin>("https://localhost:7251/api/Subjects/getSubject", subjectId);
-        userId = await HttpService.GetUserId();
-        StateHasChanged();
+        if (firstRender)
+        {
+            var subjectId = JsonSerializer.Deserialize<int>(Uri.UnescapeDataString(item));
+            taskModels = await HttpService.GetEntitiesFromApi<TaskModel>("https://localhost:7251/api/Tasks", subjectId);
+            subject = await HttpService.GetEntityFromApi<SubjectModelByAdmin>("https://localhost:7251/api/Subjects/getSubject", subjectId);
+            userId = await HttpService.GetUserId();
+            StateHasChanged();
+        }
     }
 }
 <div>
@@ -56,12 +59,16 @@
                                 {
                                     case StaticNames.ResponsePending:
                                     {
-                                        <Badge Color="Color.Secondary">StaticNames.ResponsePending</Badge>
+                                        <Button  Color="Color.Primary" Margin="Margin.Is2.FromTop">
+                                            @StaticNames.ResponsePending
+                                        </Button>
                                         break;
                                     }
                                     case StaticNames.ResponseDeclined:
                                     {
-                                            <Badge Color="Color.Danger">StaticNames.ResponseDeclined</Badge>
+                                        <Button Color="Color.Danger" Margin="Margin.Is2.FromTop">
+                                            @StaticNames.ResponseDeclined
+                                        </Button>
                                         break;
                                     }
                                 }

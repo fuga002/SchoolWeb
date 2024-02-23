@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SchoolApi.Attributes;
 using SchoolApi.Exceptions;
 using SchoolApi.Managers;
 using SchoolApi.Providers;
@@ -20,7 +21,7 @@ public class UsersController : ControllerBase
         _userManager = userManager;
         _userProvider = userProvider;
     }
-
+    [CustomAuthorize("Admin")]
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] CreateUserModel model)
     {

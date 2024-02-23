@@ -84,4 +84,18 @@ public static class ParseCollectionExtensions
         return responses.Select(response => response.ParseModel()).ToList();
     }
 
+    public static TaskResponseResultModel ParseModel(this TaskResponseResult result)
+    {
+        return result.Adapt<TaskResponseResultModel>();
+    }
+
+    public static List<TaskResponseResultModel> ParseList(this List<TaskResponseResult>? results)
+    {
+        if (results == null || results.Count == 0)
+        {
+            return new List<TaskResponseResultModel>();
+        }
+        return results.Select(response => response.ParseModel()).ToList();
+    }
+
 }

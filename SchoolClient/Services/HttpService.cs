@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Newtonsoft.Json;
 using SchoolData.Models;
 using Newtonsoft.Json.Linq;
 using System.Text;
@@ -31,6 +33,25 @@ public class HttpService
 
 
         return $"Bearer {token}";
+    }
+    private IEnumerable<Claim> ParseToken(string token)
+    {
+        var handler = new JwtSecurityTokenHandler();
+        var jsonToken = handler.ReadToken(token) as JwtSecurityToken;
+        return jsonToken?.Claims ?? new List<Claim>();
+    }
+
+    public async Task<IEnumerable<Claim>> GetClaims()
+    {
+        string token = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", "token");
+        var claims = ParseToken(token);
+        return claims;
+    }
+    public async Task<string> GetJwtToken()
+    {
+        string token = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", "token");
+        
+        return token;
     }
 
     public async Task<Guid> GetUserId()
@@ -183,5 +204,29 @@ public class HttpService
         Console.WriteLine(response.StatusCode);
         await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "userId", entity.Id);
         return entity;
+    }
+
+    public async Task<string?> GetUserRole()
+    {
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var jwtToken = tokenHandler.ReadJwtToken( await GetJwtToken());
+
+        // Get the claims from the JWT token
+        var claims = jwtToken.Claims;
+
+        // Find the user role claim
+        var roleClaim = claims.FirstOrDefault(c => c.Type == ClaimTypes.Role);
+
+        if (roleClaim != null)
+        {
+            var userRole = roleClaim.Value;
+            return userRole;
+        }
+        return null;
+    }
+
+    public async Task<Guid?> GetUserId(string text)
+    {
+        return Guid.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier)!);
     }
 }

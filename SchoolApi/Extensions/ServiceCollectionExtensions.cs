@@ -46,6 +46,7 @@ public static  class ServiceCollectionExtensions
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<ITaskRepository, TaskRepository>();
         services.AddScoped<ITaskResponseRepository, TaskResponseRepository>();
+        services.AddScoped<ITaskResponseResultRepository, TaskResponseResultRepository>();
 
         services.AddScoped<SubjectManager>();
         services.AddScoped<SubjectRequestManager>();
@@ -53,6 +54,7 @@ public static  class ServiceCollectionExtensions
         services.AddScoped<UserManager>();
         services.AddScoped<TaskManager>();
         services.AddScoped<TaskResponseManager>();
+        services.AddScoped<TaskResponseResultManager>();
 
         services.AddScoped<UserProvider>();
 

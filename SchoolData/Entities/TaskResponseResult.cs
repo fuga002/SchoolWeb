@@ -16,5 +16,5 @@ public class TaskResponseResult
 
     [ForeignKey("TaskId")]
     public int TaskId { get; set; }
-    public virtual Task? Task { get; set; }
+    public virtual TaskResponse? TaskResponse { get; set; }
 }

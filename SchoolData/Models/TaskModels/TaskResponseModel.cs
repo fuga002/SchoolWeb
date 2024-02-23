@@ -15,4 +15,5 @@ public class TaskResponseModel
     public string StudentName { get; set; }
     public UserModel? User { get; set; }
     public int TaskId { get; set; }
+    public List<TaskResponseResultModel> Results { get; set; }
 }
