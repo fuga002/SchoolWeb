@@ -98,7 +98,7 @@
 
 <Modal @ref="modalRef1">
     <ModalContent Centered>
-        <EditForm Model="@_createSubjectModel" OnValidSubmit="HandleValidEdit">
+        <EditForm Model="@_createSubjectModel" >
             <DataAnnotationsValidator />
             <ModalHeader>
                 <ModalTitle>Subject edit</ModalTitle>
@@ -122,8 +122,8 @@
                 </Field>
             </ModalBody>
             <ModalFooter>
-                <Button Color="Color.Secondary" OnClick="@HideModal">Close</Button>
-                <Button Color="Color.Primary"  Type="ButtonType.Submit" >Save Changes</Button>
+                <Button Color="Color.Secondary" Clicked="@HideModal">Close</Button>
+                <Button Color="Color.Primary" Clicked="HandleValidEdit">Save Changes</Button>
             </ModalFooter>
         </EditForm>
     </ModalContent>
@@ -132,7 +132,7 @@
 
 <Modal @ref="modalRef2">
     <ModalContent Centered>
-        <EditForm Model="@_createSubjectModel" OnValidSubmit="HandleValidEditPhoto">
+        <EditForm Model="@_createSubjectModel" >
         <DataAnnotationsValidator />
         <ModalHeader>
             <ModalTitle>Subject edit</ModalTitle>
@@ -151,8 +151,8 @@
             </Field>
         </ModalBody>
         <ModalFooter>
-            <Button Color="Color.Secondary" OnClick="@HideModal">Close</Button>
-            <Button Color="Color.Primary"  Type="ButtonType.Submit" >Save Changes</Button>
+            <Button Color="Color.Secondary" Clicked="@HideModal">Close</Button>
+                <Button Color="Color.Primary" Clicked="HandleValidEditPhoto">Save Changes</Button>
         </ModalFooter>
         </EditForm>
     </ModalContent>
@@ -161,7 +161,7 @@
 
 <Modal @ref="modalRef3">
     <ModalContent Centered>
-        <EditForm Model="@_createSubjectModel" OnValidSubmit="HandleValidAddTeacher">
+        <EditForm Model="@_createSubjectModel" >
         <DataAnnotationsValidator />
         <ModalHeader>
             <ModalTitle>Add teacher</ModalTitle>
@@ -180,8 +180,8 @@
             </Field>
         </ModalBody>
         <ModalFooter>
-            <Button Color="Color.Secondary" OnClick="@HideModal">Close</Button>
-            <Button Color="Color.Primary"  Type="ButtonType.Submit" >Save Changes</Button>
+            <Button Color="Color.Secondary" Clicked="@HideModal">Close</Button>
+                <Button Color="Color.Primary" Clicked="HandleValidAddTeacher">Save Changes</Button>
         </ModalFooter>
         </EditForm>
     </ModalContent>
@@ -233,7 +233,7 @@
     private async Task HandleValidEdit()
     {
 
-        var response = await HttpService.Post($"https://localhost:7251/{_updateSubject.SubjectId}", _updateSubject);
+        var response = await HttpService.Update($"https://localhost:7251/{_updateSubject.SubjectId}", _updateSubject);
         if (response.StatusCode == HttpStatusCode.OK)
         {
             NavigationManager.NavigateTo("/subjects");
@@ -243,7 +243,7 @@
     private async Task HandleValidAddTeacher()
     {
 
-        var response = await HttpService.Post($"https://localhost:7251/api/Subjects/addTeacher", _addTeacherModel);
+        var response = await HttpService.Update($"https://localhost:7251/api/Subjects/addTeacher", _addTeacherModel);
         if (response.StatusCode == HttpStatusCode.OK)
         {
             NavigationManager.NavigateTo("/subjects");
@@ -253,7 +253,7 @@
     private async Task HandleValidEditPhoto()
     {
 
-        var response = await HttpService.Post($"https://localhost:7251/api/Subjects/updatePhoto/{_updatePhotoModel.SubjectId}", _addTeacherModel);
+        var response = await HttpService.Update($"https://localhost:7251/api/Subjects/updatePhoto/{_updatePhotoModel.SubjectId}", _addTeacherModel);
         if (response.StatusCode == HttpStatusCode.OK)
         {
             NavigationManager.NavigateTo("/subjects");

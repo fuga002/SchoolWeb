@@ -37,6 +37,7 @@
             <TableHeaderCell>End date</TableHeaderCell>
             <TableHeaderCell>Max grade</TableHeaderCell>
             <TableHeaderCell>Task responses</TableHeaderCell>
+            <TableHeaderCell>Edit task details</TableHeaderCell>
             <TableHeaderCell><Button Color="Color.Primary" Clicked="() => ShowModal(1)">Create task</Button></TableHeaderCell>
         </TableRow>
     </TableHeader>
@@ -51,8 +52,7 @@
                 <TableRowCell>@task.StartDate</TableRowCell>
                 <TableRowCell>@task.EndDate</TableRowCell>
                 <TableRowCell>@task.MaxGrade</TableRowCell>
-                <TableRowCell><button class="btn btn-primary" @onclick="() => Navigate(task.Id)">Login</button></TableRowCell>
-                <TableRowCell><Button Color="Color.Primary" Clicked="() => ShowModal(2)">Edit Subject</Button></TableRowCell>
+                <TableRowCell><Button Color="Color.Primary" Clicked="() => ShowEditModal(task)">Edit Task Deatils</Button></TableRowCell>
                 <TableRowCell><Button Color="Color.Primary" Clicked="() => ShowModal(3)">Update photo</Button></TableRowCell>
                 <TableRowCell><Button Color="Color.Primary" Clicked="() => ShowModal(4)">Add teacher</Button></TableRowCell>
                 <TableRowCell></TableRowCell>
@@ -65,10 +65,10 @@
                 
 <Modal @ref="modalRef">
     <ModalContent Centered>
-        <EditForm Model="@_createTaskModel" OnValidSubmit="HandleValidSubmit">
+        <EditForm Model="@_createTaskModel" >
             <DataAnnotationsValidator />
             <ModalHeader>
-                <ModalTitle>Add subject</ModalTitle>
+                <ModalTitle>Add task</ModalTitle>
                 <CloseButton/>
             </ModalHeader>
             <ModalBody>
@@ -99,52 +99,42 @@
                 </Field>
             </ModalBody>
             <ModalFooter>
-                <Button Color="Color.Secondary" OnClick="@HideModal">Close</Button>
-                <Button Color="Color.Primary"  Type="ButtonType.Submit" >Save Changes</Button>
+                <Button Color="Color.Secondary" Clicked="@HideModal">Close</Button>
+                <Button Color="Color.Primary" Clicked="HandleValidSubmit">Save Changes</Button>
             </ModalFooter>
         </EditForm>
     </ModalContent>
 
 </Modal>       
 
-<Modal @ref="modalRef1">
+<Modal @ref="editModal">
     <ModalContent Centered>
-        <EditForm Model="@_createTaskModel" OnValidSubmit="HandleValidSubmit">
+        <EditForm Model="@_createTaskModel">
             <DataAnnotationsValidator />
             <ModalHeader>
-                <ModalTitle>Add subject</ModalTitle>
+                <ModalTitle>Edit subject</ModalTitle>
                 <CloseButton/>
             </ModalHeader>
             <ModalBody>
                 <Field>
                     <FieldLabel>Title</FieldLabel>
-                    <InputText @bind-Value="@_createTaskModel.TaskTitle" Placeholder="Task title"/>
-                    <ValidationMessage For="@(() => _createTaskModel.TaskTitle)" />
+                    <InputText @bind-Value="@selectedModel.TaskTitle" Placeholder="Task title" />
+                    <ValidationMessage For="@(() => selectedModel.TaskTitle)" />
                 </Field>
                 <Field>
                     <FieldLabel>Description</FieldLabel>
-                    <InputText @bind-Value="@_createTaskModel.TaskDescription" Placeholder="Enter description..."/>
-                    <ValidationMessage For="@(() => _createTaskModel.TaskDescription)" />
-                </Field>
-                <Field>
-                    <FieldLabel>Start date</FieldLabel>
-                    <InputDate @bind-Value="@_createTaskModel.StartDate" Placeholder="Start date" />
-                    <ValidationMessage For="@(() => _createTaskModel.StartDate)" />
-                </Field>
-                <Field>
-                    <FieldLabel>End date</FieldLabel>
-                    <InputDate @bind-Value="@_createTaskModel.EndDate" Placeholder="End date" />
-                    <ValidationMessage For="@(() => _createTaskModel.EndDate)" />
+                    <InputText @bind-Value="@selectedModel.TaskDescription" Placeholder="Enter description..." />
+                    <ValidationMessage For="@(() => _updateTaskModel.TaskDescription)" />
                 </Field>
                 <Field>
                     <FieldLabel>Max grade</FieldLabel>
-                    <InputNumber @bind-Value="@_createTaskModel.MaxGrade" Placeholder="Max grade" />
-                    <ValidationMessage For="@(() => _createTaskModel.MaxGrade)" />
+                    <InputNumber @bind-Value="@selectedModel.MaxGrade" Placeholder="Max grade" />
+                    <ValidationMessage For="@(() => _updateTaskModel.MaxGrade)" />
                 </Field>
             </ModalBody>
             <ModalFooter>
-                <Button Color="Color.Secondary" OnClick="@HideModal">Close</Button>
-                <Button Color="Color.Primary"  Type="ButtonType.Submit" >Save Changes</Button>
+                <Button Color="Color.Secondary" Clicked="@HideModal">Close</Button>
+                <Button Color="Color.Primary" Clicked="@OnSave">Save Changes</Button>
             </ModalFooter>
         </EditForm>
     </ModalContent>
@@ -154,26 +144,30 @@
                     
 @code {
 
-    CreateTaskModel _createTaskModel = new CreateTaskModel();
+    readonly CreateTaskModel _createTaskModel = new CreateTaskModel();
     UpdateTaskModel _updateTaskModel = new UpdateTaskModel();
 
+    TaskModel selectedModel = new();
     // reference to the modal component
     private Modal modalRef;
-    private Modal modalRef1;
-    private Modal modalRef2;
-    private Modal modalRef3;
+    private Modal editModal;
 
-    private Task ShowModal(int i)
+
+    private async Task ShowModal(int id)
     {
-        switch (i)
-        {
-            case 1: return modalRef.Show();
-            case 2: return modalRef1.Show();
-            case 3: return modalRef2.Show();
-            case 4: return modalRef3.Show();
-            default: return modalRef.Show();
-        }
+        await modalRef.Show();
+    }
 
+    private async Task OnSave()
+    {
+        var response = await HttpService.Update($"https://localhost:7251/api/Tasks/{subjectId}", selectedModel);
+        //await Update(selectedModel);
+        await editModal.Hide();
+    }
+    private async Task ShowEditModal(TaskModel model)
+    {
+        selectedModel = model;
+        await editModal.Show();
     }
 
     private Task HideModal()
@@ -186,9 +180,19 @@
     {
 
         var response = await HttpService.Post($"https://localhost:7251/api/Tasks/{subjectId}", _createTaskModel);
+        /*if (response.StatusCode == HttpStatusCode.OK)
+        {
+            NavigationManager.NavigateTo($"/taskManager/{Uri.EscapeDataString(subjectId.ToString())}");
+        }*/
+        await modalRef.Hide();
+    }
+    private async Task HandleValidEdit()
+    {
+
+        var response = await HttpService.Update($"https://localhost:7251/api/Tasks", _updateTaskModel);
         if (response.StatusCode == HttpStatusCode.OK)
         {
-            NavigationManager.NavigateTo("/subjects");
+            NavigationManager.NavigateTo($"/taskManager/{Uri.EscapeDataString(subjectId.ToString())}");
         }
         await modalRef.Hide();
     }

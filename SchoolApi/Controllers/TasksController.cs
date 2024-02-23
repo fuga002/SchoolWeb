@@ -52,11 +52,11 @@ public class TasksController : ControllerBase
     }
 
     [HttpPut]
-    public async Task<IActionResult> UpdateTask(int subjectId, int taskId, [FromBody] UpdateTaskModel model)
+    public async Task<IActionResult> UpdateTask(int subjectId, [FromBody] UpdateTaskModel model)
     {
         try
         {
-            var task = await _taskManager.UpdateTask(subjectId,taskId, model);
+            var task = await _taskManager.UpdateTask(model.SubjectId,model.TaskId, model);
             return Ok(task);
         }
         catch (TaskNotFoundException )

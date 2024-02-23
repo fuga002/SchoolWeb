@@ -11,6 +11,10 @@ public class UpdateTaskModel
 
     [Required]
     public float MaxGrade { get; set; }
-    
+
+    public int SubjectId { get; set; } 
+    public int TaskId { get; set; }
+
+
 
 }

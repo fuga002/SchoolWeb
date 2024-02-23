@@ -100,6 +100,21 @@ public  class HttpService
         return response; 
     }
 
+    public async Task<HttpResponseMessage> Update(string apiUrl, object obj)
+    {
+        using var httpClient = new HttpClient();
+        var request = new HttpRequestMessage(HttpMethod.Put, apiUrl);
+        var jsonContent = new StringContent(JsonConvert.SerializeObject(obj), Encoding.UTF8, "application/json");
+        request.Content = jsonContent;
+        request.Headers.Add("Authorization", await AuthorizeApiRequest());
+        HttpResponseMessage response = await httpClient.SendAsync(request);
+        response.EnsureSuccessStatusCode();
+
+        string responseBody = await response.Content.ReadAsStringAsync();
+        Console.WriteLine(response.StatusCode);
+        return response; 
+    }
+
     public async Task<List<TaskModel>> GetRelatedTasks(string apiUrl)
     {
         using var httpClient = new HttpClient();
