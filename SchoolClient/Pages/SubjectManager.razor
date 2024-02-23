@@ -10,7 +10,6 @@
 {
     List<SubjectModelByAdmin> subjects = new List<SubjectModelByAdmin>();
     List<TaskModel> tasks = new List<TaskModel>();
-    int i = 0;
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -33,24 +32,23 @@
             <TableHeaderCell>Total tasks count</TableHeaderCell>
             <TableHeaderCell>Edit subject</TableHeaderCell>
             <TableHeaderCell>Edit subject photo</TableHeaderCell>
-            <TableHeaderCell>Add teacher to subject</TableHeaderCell>
-            <TableHeaderCell>Add subject</TableHeaderCell>
+            <TableHeaderCell>Add teacher to subject</TableHeaderCell>   
+            <TableHeaderCell><Button Color="Color.Primary" Clicked="() => ShowModal(1)">Create subject</Button></TableHeaderCell>
         </TableRow>
     </TableHeader>
     <TableBody>
         @foreach (var subject in subjects)
         {
-            i++;
             <TableRow>
-                <TableRowHeader>@i</TableRowHeader>
+                <TableRowHeader>@subject.Id</TableRowHeader>
                 <TableRowCell>@subject.SubjectName</TableRowCell>
-                <TableRowCell>@subject.SubjectDescription</TableRowCell>
-                <TableRowCell>@subject.TotalGrade</TableRowCell>
+                <TableRowCell>@subject.SubjectDescription</TableRowCell>]]][]
+                <TableRowCell>@subject.TotalGrade.ToString()</TableRowCell>
                 <TableRowCell>@subject.Tasks.Count</TableRowCell>
-                <TableRowCell><Button Color="Color.Primary" Clicked="() => ShowModal(1)">Edit Subject</Button></TableRowCell>
                 <TableRowCell><Button Color="Color.Primary" Clicked="() => ShowModal(2)">Edit Subject</Button></TableRowCell>
-                <TableRowCell><Button Color="Color.Primary" Clicked="() => ShowModal(1)">Edit Subject</Button></TableRowCell>
-                <TableRowCell><Button Color="Color.Primary" Clicked="() => ShowModal(1)">Create subject</Button></TableRowCell>
+                <TableRowCell><Button Color="Color.Primary" Clicked="() => ShowModal(3)">Update photo</Button></TableRowCell>
+                <TableRowCell><Button Color="Color.Primary" Clicked="() => ShowModal(4)">Add teacher</Button></TableRowCell>
+                <TableRowCell></TableRowCell>
             </TableRow>
         }
     </TableBody>
@@ -65,7 +63,7 @@
         <EditForm Model="@_createSubjectModel" OnValidSubmit="HandleValidSubmit">
             <DataAnnotationsValidator />
             <ModalHeader>
-                <ModalTitle>Employee edit</ModalTitle>
+                <ModalTitle>Add subject</ModalTitle>
                 <CloseButton/>
             </ModalHeader>
             <ModalBody>
@@ -101,26 +99,84 @@
 <Modal @ref="modalRef1">
     <ModalContent Centered>
         <EditForm Model="@_createSubjectModel" OnValidSubmit="HandleValidEdit">
+            <DataAnnotationsValidator />
+            <ModalHeader>
+                <ModalTitle>Subject edit</ModalTitle>
+                <CloseButton/>
+            </ModalHeader>
+            <ModalBody>
+                <Field>
+                    <FieldLabel>Subject id</FieldLabel>
+                    <InputNumber @bind-Value="@_updateSubject.SubjectId" Placeholder="Subject Id"/>
+                    <ValidationMessage For="@(() => _updateSubject.SubjectId)" />
+                </Field>
+                <Field>
+                    <FieldLabel>Name</FieldLabel>
+                    <InputText @bind-Value="@_updateSubject.SubjectName" Placeholder="Enter name..."/>
+                    <ValidationMessage For="@(() => _updateSubject.SubjectName)" />
+                </Field>
+                <Field>
+                    <FieldLabel>Description</FieldLabel>
+                    <InputText @bind-Value="@_updateSubject.SubjectDescription" Placeholder="Enter description..."/>
+                    <ValidationMessage For="@(() => _updateSubject.SubjectDescription)" />
+                </Field>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary" OnClick="@HideModal">Close</Button>
+                <Button Color="Color.Primary"  Type="ButtonType.Submit" >Save Changes</Button>
+            </ModalFooter>
+        </EditForm>
+    </ModalContent>
+
+</Modal>
+
+<Modal @ref="modalRef2">
+    <ModalContent Centered>
+        <EditForm Model="@_createSubjectModel" OnValidSubmit="HandleValidEditPhoto">
         <DataAnnotationsValidator />
         <ModalHeader>
-            <ModalTitle>Employee edit</ModalTitle>
+            <ModalTitle>Subject edit</ModalTitle>
             <CloseButton/>
         </ModalHeader>
         <ModalBody>
             <Field>
                 <FieldLabel>Subject id</FieldLabel>
-                <InputText @bind-Value="@_updateSubject.SubjectName" Placeholder="Subject Id"/>
-                <ValidationMessage For="@(() => _updateSubject.SubjectId)" />
+                <InputNumber @bind-Value="@_updatePhotoModel.SubjectId" Placeholder="Subject Id"/>
+                <ValidationMessage For="@(() => _updatePhotoModel.SubjectId)" />
             </Field>
             <Field>
                 <FieldLabel>Name</FieldLabel>
-                <InputText @bind-Value="@_updateSubject.SubjectName" Placeholder="Enter name..."/>
-                <ValidationMessage For="@(() => _updateSubject.SubjectName)" />
+                <InputFile @bind-Value="@_updatePhotoModel.File" Placeholder="Photo file"/>
+                <ValidationMessage For="@(() => _updatePhotoModel.File)" />
+            </Field>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" OnClick="@HideModal">Close</Button>
+            <Button Color="Color.Primary"  Type="ButtonType.Submit" >Save Changes</Button>
+        </ModalFooter>
+        </EditForm>
+    </ModalContent>
+
+</Modal>
+
+<Modal @ref="modalRef3">
+    <ModalContent Centered>
+        <EditForm Model="@_createSubjectModel" OnValidSubmit="HandleValidAddTeacher">
+        <DataAnnotationsValidator />
+        <ModalHeader>
+            <ModalTitle>Add teacher</ModalTitle>
+            <CloseButton/>
+        </ModalHeader>
+        <ModalBody>
+            <Field>
+                <FieldLabel>Subject id</FieldLabel>
+                <InputNumber @bind-Value="@_addTeacherModel.SubjectId" Placeholder="Subject Id"/>
+                <ValidationMessage For="@(() => _addTeacherModel.SubjectId)" />
             </Field>
             <Field>
-                <FieldLabel>Description</FieldLabel>
-                <InputText @bind-Value="@_updateSubject.SubjectDescription" Placeholder="Enter description..."/>
-                    <ValidationMessage For="@(() => _updateSubject.SubjectDescription)" />
+                <FieldLabel>Name</FieldLabel>
+                <InputText @bind-Value="@_addTeacherModel.TeacherUsername" Placeholder="Teacher username"/>
+                    <ValidationMessage For="@(() => _addTeacherModel.TeacherUsername)" />
             </Field>
         </ModalBody>
         <ModalFooter>
@@ -136,6 +192,8 @@
 
     CreateSubjectModel _createSubjectModel = new CreateSubjectModel();
     UpdateSubjectModel _updateSubject = new UpdateSubjectModel();
+    AddTeacherModel _addTeacherModel = new AddTeacherModel();
+    UpdatePhotoModel _updatePhotoModel = new UpdatePhotoModel();
 
     // reference to the modal component
     private Modal modalRef;
@@ -182,6 +240,28 @@
         }
         await modalRef.Hide();
     }
+    private async Task HandleValidAddTeacher()
+    {
+
+        var response = await HttpService.Post($"https://localhost:7251/api/Subjects/addTeacher", _addTeacherModel);
+        if (response.StatusCode == HttpStatusCode.OK)
+        {
+            NavigationManager.NavigateTo("/subjects");
+        }
+        await modalRef.Hide();
+    }
+    private async Task HandleValidEditPhoto()
+    {
+
+        var response = await HttpService.Post($"https://localhost:7251/api/Subjects/updatePhoto/{_updatePhotoModel.SubjectId}", _addTeacherModel);
+        if (response.StatusCode == HttpStatusCode.OK)
+        {
+            NavigationManager.NavigateTo("/subjects");
+        }
+        await modalRef.Hide();
+    }
+
+
 
 
 }

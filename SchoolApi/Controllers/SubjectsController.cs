@@ -44,9 +44,9 @@ public class SubjectsController : ControllerBase
     }
 
     [HttpPut("addTeacher/{subjectId}")]
-    public async Task<IActionResult> AddTeacherToSubject(int subjectId, string userName)
+    public async Task<IActionResult> AddTeacherToSubject(AddTeacherModel model)
     {
-        return Ok(await _subjectManager.AddTeacherToSubject(subjectId, userName));
+        return Ok(await _subjectManager.AddTeacherToSubject(model.SubjectId, model.TeacherUsername));
     }
 
     [HttpPut("updatePhoto/{subjectId}")]
