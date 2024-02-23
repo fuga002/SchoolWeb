@@ -1,9 +1,8 @@
-﻿using SchoolApi.Extensions;
+﻿using School.Common.Models.SubjectModels;
+using SchoolApi.Extensions;
 using SchoolApi.Services;
 using SchoolApi.Services.Interfaces;
 using SchoolData.Entities;
-using SchoolData.Models.SubjectModels;
-using SchoolData.Models.TaskModels;
 using Task = System.Threading.Tasks.Task;
 
 namespace SchoolApi.Managers;

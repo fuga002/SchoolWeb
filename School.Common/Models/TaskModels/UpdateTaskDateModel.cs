@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SchoolData.Models.TaskModels;
+namespace School.Common.Models.TaskModels;
 
 public class UpdateTaskDateModel
 {

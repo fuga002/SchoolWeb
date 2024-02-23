@@ -1,9 +1,9 @@
-﻿using SchoolApi.Exceptions;
+﻿using School.Common.Models.TaskModels;
+using SchoolApi.Exceptions;
 using SchoolApi.Extensions;
 using SchoolApi.Services;
 using SchoolApi.Services.Interfaces;
 using SchoolData.Entities;
-using SchoolData.Models.TaskModels;
 using SchoolData.StaticServices;
 
 namespace SchoolApi.Managers;

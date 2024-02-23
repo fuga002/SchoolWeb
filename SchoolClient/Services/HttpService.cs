@@ -1,11 +1,11 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Newtonsoft.Json;
-using SchoolData.Models;
 using Newtonsoft.Json.Linq;
 using System.Text;
 using Microsoft.JSInterop;
-using SchoolData.Models.TaskModels;
+using School.Common.Models;
+using School.Common.Models.TaskModels;
 
 namespace SchoolClient.Services;
 

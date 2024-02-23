@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using School.Common.Models.TaskModels;
 using SchoolApi.Attributes;
 using SchoolApi.Exceptions;
 using SchoolApi.Managers;
 using SchoolApi.Providers;
-using SchoolData.Models.TaskModels;
 
 namespace SchoolApi.Controllers;
 

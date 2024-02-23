@@ -1,8 +1,8 @@
 ﻿using Mapster;
+using School.Common.Models;
+using School.Common.Models.SubjectModels;
+using School.Common.Models.TaskModels;
 using SchoolData.Entities;
-using SchoolData.Models;
-using SchoolData.Models.SubjectModels;
-using SchoolData.Models.TaskModels;
 using Task = SchoolData.Entities.Task;
 
 namespace SchoolApi.Extensions;

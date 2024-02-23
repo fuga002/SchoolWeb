@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using School.Common.Models.SubjectModels;
 using SchoolApi.Attributes;
 using SchoolApi.Managers;
-using SchoolData.Models.SubjectModels;
 
 namespace SchoolApi.Controllers;
 

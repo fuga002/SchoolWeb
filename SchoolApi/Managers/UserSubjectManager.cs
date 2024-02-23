@@ -1,8 +1,8 @@
-﻿using SchoolApi.Exceptions;
+﻿using School.Common.Models.SubjectModels;
+using SchoolApi.Exceptions;
 using SchoolApi.Extensions;
 using SchoolApi.Services.Interfaces;
 using SchoolData.Entities;
-using SchoolData.Models.SubjectModels;
 using Task = System.Threading.Tasks.Task;
 
 namespace SchoolApi.Managers;

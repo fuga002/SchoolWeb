@@ -1,6 +1,6 @@
-﻿using SchoolData.Models.SubjectModels;
+﻿using School.Common.Models.SubjectModels;
 
-namespace SchoolData.Models;
+namespace School.Common.Models;
 
 public class UserModel
 {

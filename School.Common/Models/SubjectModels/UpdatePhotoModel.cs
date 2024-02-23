@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 
-namespace SchoolData.Models.SubjectModels;
+namespace School.Common.Models.SubjectModels;
 
 public class UpdatePhotoModel
 {

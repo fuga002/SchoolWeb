@@ -1,4 +1,4 @@
-﻿namespace SchoolData.Models.TaskModels;
+﻿namespace School.Common.Models.TaskModels;
 
 public class TaskResponseResultModel
 {

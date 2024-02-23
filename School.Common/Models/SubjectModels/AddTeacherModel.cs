@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SchoolData.Models.SubjectModels;
+namespace School.Common.Models.SubjectModels;
 
 public class AddTeacherModel
 {

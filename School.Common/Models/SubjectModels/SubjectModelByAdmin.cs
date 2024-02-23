@@ -1,6 +1,6 @@
-﻿using SchoolData.Models.TaskModels;
+﻿using School.Common.Models.TaskModels;
 
-namespace SchoolData.Models.SubjectModels;
+namespace School.Common.Models.SubjectModels;
 
 public class SubjectModelByAdmin
 {

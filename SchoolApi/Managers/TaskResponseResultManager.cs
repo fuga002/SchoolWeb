@@ -1,7 +1,7 @@
-﻿using SchoolApi.Extensions;
+﻿using School.Common.Models.TaskModels;
+using SchoolApi.Extensions;
 using SchoolApi.Services.Interfaces;
 using SchoolData.Entities;
-using SchoolData.Models.TaskModels;
 
 namespace SchoolApi.Managers;
 

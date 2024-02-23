@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using School.Common.Models;
 using SchoolApi.Attributes;
 using SchoolApi.Exceptions;
 using SchoolApi.Managers;
 using SchoolApi.Providers;
-using SchoolData.Models;
 
 namespace SchoolApi.Controllers;
 

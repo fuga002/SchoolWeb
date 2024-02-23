@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using SchoolData.Models.SubjectModels;
 
-namespace SchoolData.Models.TaskModels;
+namespace School.Common.Models.TaskModels;
 
 public class TaskModel
 {

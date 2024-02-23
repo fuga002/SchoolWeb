@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 
-namespace SchoolData.Models.TaskModels;
+namespace School.Common.Models.TaskModels;
 
 public class CreateTaskResponseModel
 {

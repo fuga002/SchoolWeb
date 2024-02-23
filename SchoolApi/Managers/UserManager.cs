@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using School.Common.Models;
 using SchoolApi.Exceptions;
 using SchoolApi.Extensions;
 using SchoolApi.Services;
 using SchoolApi.Services.Interfaces;
 using SchoolData.Entities;
-using SchoolData.Models;
 using SchoolData.StaticServices;
 using Task = System.Threading.Tasks.Task;
 
