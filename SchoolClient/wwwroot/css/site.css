@@ -319,3 +319,9 @@ button {
         background-color: #f2f2f2;
         color: #333;
     }
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Adjust the gap between buttons */
+}

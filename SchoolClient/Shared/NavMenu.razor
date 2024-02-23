@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@inject NavigationManager NavigationManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
@@ -28,10 +30,13 @@
                 <p>user</p>
             </div>
             <!-- linklar yoziiladi  -->
-            <a href="./home.html">home</a>
-            <br>
-            <a href="./login.html">login</a>
-            <br>
+            <div class="button-container">
+                    <button class="btn btn-primary" @onclick="() => Navigate(Home)">Home</button>
+                <br/>
+                    <button class="btn btn-primary" @onclick="() => Navigate(SubjectManager)">Subject Manager</button>
+                
+            </div>
+            
 
         </div>
     </div>
@@ -41,3 +46,12 @@
 </body>
 </html>
 
+@code
+{
+    private const string Home = "";
+    private const string SubjectManager = "subjectManager";
+    private void Navigate(string url)
+    {
+        NavigationManager.NavigateTo($"/{url}");
+    }
+}
