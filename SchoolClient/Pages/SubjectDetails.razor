@@ -2,24 +2,29 @@
 @using SchoolClient.Services
 @using SchoolData.Models.TaskModels
 @using System.Text.Json
+@using SchoolData.Models.SubjectModels
 @inject HttpService HttpService
 @code {
     [Parameter]
     public string item { get; set; }
     List<TaskModel> taskModels = new List<TaskModel>();
+    SubjectModelByAdmin subject = new SubjectModelByAdmin();
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         var subjectId = JsonSerializer.Deserialize<int>(Uri.UnescapeDataString(item));
         if (firstRender)
         {
             taskModels = await HttpService.GetEntitiesFromApi<TaskModel>("https://localhost:7251/api/Tasks", subjectId);
+            subject = await HttpService.GetEntityFromApi<SubjectModelByAdmin>("https://localhost:7251/api/Subjects/getSubject", subjectId);
         }
         StateHasChanged();
     }
 }
 <div>
     <header class="header">
-        <h2 class="header_title">Lorem ipsum dolor sit.</h2>
+        <h1 class="header_title"><b>@subject.SubjectName</b></h1>
+        <h3 class="header_title">@subject.SubjectDescription</h3>
+        <h4>Total grade @subject.TotalGetGrade/@subject.TotalGrade</h4>
         <div><i class="fa-solid fa-arrow-left-long header_icon"></i></div>
     </header>
     <main class="main">
@@ -31,8 +36,9 @@
                     <div class="main_card_left">
                         <h4 class="main_title">@task.TaskTitle</h4>
                         <p class="main_text">@task.TaskDescription</p>
-                        <button class="card_button">Kirish</button>
+                        <button class="card_button">Get task</button>
                     </div>
+                    <br/>
                     <div class="main_card_right">
                         <h4 class="main_start_date">start : @task.StartDate</h4>
                         <h4 class="main_stop_date">deadline :@task.EndDate</h4>

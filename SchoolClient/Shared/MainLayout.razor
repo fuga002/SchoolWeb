@@ -1,5 +1,5 @@
 ﻿@inherits LayoutComponentBase
-
+@inject NavigationManager NavigationManager
 <PageTitle>SchoolClient</PageTitle>
 
 <div class="page">
@@ -10,7 +10,7 @@
 
     <main>
         <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+            <button class="btn btn-primary" @onclick="Navigate" >Login</button>
         </div>
 
         <article class="content px-4">
@@ -18,3 +18,11 @@
         </article>
     </main>
 </div>
+
+@code
+{
+    private void Navigate()
+    {
+        NavigationManager.NavigateTo("/login");
+    }
+}

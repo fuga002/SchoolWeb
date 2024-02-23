@@ -236,3 +236,86 @@ a, .btn-link {
     border: 1px solid black;
     border-radius: 50%;
 }
+
+.registration-container {
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 5px;
+    max-width: 400px;
+    margin: 0 auto;
+    background-color: mediumorchid;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+}
+
+.form-control {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.notification {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 20px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s, visibility 0.5s;
+}
+
+    .notification.show {
+        opacity: 1;
+        visibility: visible;
+        animation: fadeIn 0.5s ease-in-out;
+    }
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.notification button {
+    margin-top: 10px;
+    padding: 8px 16px;
+    background-color: #fff;
+    color: #4CAF50;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+    .notification button:hover {
+        background-color: #f2f2f2;
+        color: #333;
+    }

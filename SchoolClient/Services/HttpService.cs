@@ -64,6 +64,41 @@ public  class HttpService
         Console.WriteLine(response.StatusCode);
         return entities;
     }
+    public   async Task<T> GetEntityFromApi<T>(string apiUrl,object? obj = null) where T : new()
+    {
+        using var httpClient = new HttpClient();
+        var request = new HttpRequestMessage(HttpMethod.Get, apiUrl);
+        request.Headers.Add("Authorization",await AuthorizeApiRequest());
+        if (obj is int)
+        {
+           request =  new HttpRequestMessage(HttpMethod.Get, apiUrl+$"/{Convert.ToInt32(obj)}");
+           request.Headers.Add("Authorization", await AuthorizeApiRequest());
+        }
+        HttpResponseMessage response = await httpClient.SendAsync(request);
+        response.EnsureSuccessStatusCode(); 
+
+        string responseBody = await response.Content.ReadAsStringAsync();
+        T entity = JsonConvert.DeserializeObject<T>(responseBody) ?? new T();
+        Console.WriteLine(response.StatusCode);
+        return entity;
+    }
+
+
+
+    public async Task<HttpResponseMessage> Post(string apiUrl, object obj)
+    {
+        using var httpClient = new HttpClient();
+        var request = new HttpRequestMessage(HttpMethod.Post, apiUrl);
+        var jsonContent = new StringContent(JsonConvert.SerializeObject(obj), Encoding.UTF8, "application/json");
+        request.Content = jsonContent;
+        request.Headers.Add("Authorization", await AuthorizeApiRequest());
+        HttpResponseMessage response = await httpClient.SendAsync(request);
+        response.EnsureSuccessStatusCode();
+
+        string responseBody = await response.Content.ReadAsStringAsync();
+        Console.WriteLine(response.StatusCode);
+        return response; 
+    }
 
     public async Task<List<TaskModel>> GetRelatedTasks(string apiUrl)
     {

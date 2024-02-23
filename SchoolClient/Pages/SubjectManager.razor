@@ -1,0 +1,74 @@
+﻿@page "/subjectManager"
+@using Blazorise
+@using SchoolClient.Services
+@using SchoolData.Models.SubjectModels
+@using System.Net
+@inject HttpService HttpService
+@inject NavigationManager NavigationManager
+
+<Button Color="Color.Primary" Clicked="@ShowModal">Create subject</Button>
+
+<Modal @ref="modalRef">
+    <ModalContent Centered>
+        <EditForm Model="@_createSubjectModel" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ModalHeader>
+            <ModalTitle>Employee edit</ModalTitle>
+            <CloseButton/>
+        </ModalHeader>
+        <ModalBody>
+            <Field>
+                <FieldLabel>Name</FieldLabel>
+                <InputText @bind-Value="@_createSubjectModel.SubjectName" Placeholder="Enter name..."/>
+                <ValidationMessage For="@(() => _createSubjectModel.SubjectName)" />
+            </Field>
+            <Field>
+                <FieldLabel>Description</FieldLabel>
+                <InputText @bind-Value="@_createSubjectModel.SubjectDescription" Placeholder="Enter description..."/>
+                    <ValidationMessage For="@(() => _createSubjectModel.SubjectDescription)" />
+            </Field>
+            <Field>
+                <FieldLabel>Teacher Username</FieldLabel>
+                <InputText @bind-Value="@_createSubjectModel.TeacherUsername" Placeholder="Enter teacher's username..."/>
+                    <ValidationMessage For="@(() => _createSubjectModel.TeacherUsername)" />
+            </Field>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" OnClick="@HideModal">Close</Button>
+            <Button Color="Color.Primary"  Type="ButtonType.Submit" >Save Changes</Button>
+        </ModalFooter>
+        </EditForm>
+    </ModalContent>
+
+</Modal>
+
+@code {
+
+    CreateSubjectModel _createSubjectModel = new CreateSubjectModel();
+
+    // reference to the modal component
+    private Modal modalRef;
+
+    private Task ShowModal()
+    {
+        return modalRef.Show();
+    }
+
+    private Task HideModal()
+    {
+
+        return modalRef.Hide(); 
+    }
+
+    private async Task HandleValidSubmit()
+    {
+
+        var response = await HttpService.Post("https://localhost:7251/api/Subjects", _createSubjectModel);
+        if (response.StatusCode == HttpStatusCode.OK)
+        {
+            NavigationManager.NavigateTo("/subjects");
+        }
+        await modalRef.Hide();
+    }
+
+}
