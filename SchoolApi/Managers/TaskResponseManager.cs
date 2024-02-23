@@ -11,10 +11,12 @@ namespace SchoolApi.Managers;
 public class TaskResponseManager
 {
     private readonly ITaskResponseRepository _taskResponseRepository;
+    private readonly IUserRepository _userRepository;
 
-    public TaskResponseManager(ITaskResponseRepository taskResponseRepository)
+    public TaskResponseManager(ITaskResponseRepository taskResponseRepository, IUserRepository userRepository)
     {
         _taskResponseRepository = taskResponseRepository;
+        _userRepository = userRepository;
     }
 
     public async Task<List<TaskResponseModel>> GetAllTaskResponse(int taskId)
@@ -43,7 +45,8 @@ public class TaskResponseManager
             ResponseText = model.ResponseText,
             Status = StaticNames.ResponsePending,
             UserId = userId,
-            TaskId = model.TaskId
+            TaskId = model.TaskId,
+            StudentName = (await _userRepository.GetUserById(userId)).FirstName
         };
         await _taskResponseRepository.AddTaskResponse(taskResponse);
         return taskResponse.ParseModel();

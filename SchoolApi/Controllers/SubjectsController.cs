@@ -50,7 +50,7 @@ public class SubjectsController : ControllerBase
     }
 
     [HttpPut("updatePhoto/{subjectId}")]
-    public async Task<IActionResult> UpdateSubjectPhoto(int subjectId, IFormFile file)
+    public async Task<IActionResult> UpdateSubjectPhoto( int subjectId, IFormFile file)
     {
         return Ok(await _subjectManager.UpdateSubjectPhoto(subjectId, file));
     }

@@ -3,6 +3,7 @@
 @using SchoolData.Models.TaskModels
 @using System.Text.Json
 @using SchoolData.Models.SubjectModels
+@using SchoolData.StaticServices
 @inject HttpService HttpService
 @code {
     [Parameter]
@@ -24,7 +25,7 @@
     <header class="header">
         <h1 class="header_title"><b>@subject.SubjectName</b></h1>
         <h3 class="header_title">@subject.SubjectDescription</h3>
-        <h4>Total grade @subject.TotalGetGrade/@subject.TotalGrade</h4>
+        <h4>Total grade @subject.TotalGrade</h4>
         <div><i class="fa-solid fa-arrow-left-long header_icon"></i></div>
     </header>
     <main class="main">
@@ -33,17 +34,24 @@
             <div class="main_card">
                 @foreach (var task in taskModels)
                 {
-                    <div class="main_card_left">
-                        <h4 class="main_title">@task.TaskTitle</h4>
-                        <p class="main_text">@task.TaskDescription</p>
-                        <button class="card_button">Get task</button>
-                    </div>
-                    <br/>
-                    <div class="main_card_right">
-                        <h4 class="main_start_date">start : @task.StartDate</h4>
-                        <h4 class="main_stop_date">deadline :@task.EndDate</h4>
-                        <h4 class="main_max_grade">max_grade : @task.MaxGrade</h4>
-                    </div>
+                    <Card>
+                        <CardBody>
+                            <CardTitle Size="3">
+                                @task.TaskTitle
+                            </CardTitle>
+                            <CardText>
+                                @task.TaskDescription
+                            </CardText>
+                            <CardText>
+                               <strong>Start date :</strong>  @task.StartDate.ToString("dd/MM/yyyy");
+                                <br/>
+                                <strong>End date  : </strong> @task.EndDate.ToString("dd/MM/yyyy");
+                            </CardText>
+                            <Button Color="Color.Primary" Margin="Margin.Is2.FromTop">
+                                <Button Color="Color.Primary" Clicked="() => ShowCreateModal(task)">Response Task</Button><Icon Name="IconName.ArrowRight" />
+                            </Button>
+                        </CardBody>
+                    </Card>
                 }
             </div>
         }
@@ -55,3 +63,60 @@
 </div>
 
 
+<Modal @ref="createModal">
+    <ModalContent Centered>
+        <EditForm Model="@_createTaskResponseModel">
+            <DataAnnotationsValidator />
+            <ModalHeader>
+                <ModalTitle>Add task</ModalTitle>
+                <CloseButton />
+            </ModalHeader>
+            <ModalBody>
+                <Field>
+                    <FieldLabel>Name</FieldLabel>
+                    <InputFile @bind-Value="@_createTaskResponseModel.File" Placeholder="File" />
+                    <ValidationMessage For="@(() => _createTaskResponseModel.File)" />
+                </Field>
+                <Field>
+                    <FieldLabel>Description</FieldLabel>
+                    <InputText @bind-Value="@_createTaskResponseModel.ResponseText" Placeholder="Response text" />
+                    <ValidationMessage For="@(() => _createTaskResponseModel.ResponseText)" />
+                </Field>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary" Clicked="@HideModal">Close</Button>
+                <Button Color="Color.Primary" Clicked="HandleValidSubmit">Save Changes</Button>
+            </ModalFooter>
+        </EditForm>
+    </ModalContent>
+
+</Modal>
+
+@code {
+
+    readonly CreateTaskResponseModel _createTaskResponseModel = new CreateTaskResponseModel();
+
+    private Modal createModal;
+
+
+
+    
+    private async Task ShowCreateModal(TaskModel model)
+    {
+        await createModal.Show();
+        _createTaskResponseModel.TaskId = model.Id;
+    }
+
+
+    private async Task HandleValidSubmit()
+    {
+        var response = await HttpService.Post($"https://localhost:7251/api/TaskResponses/AddTaskResponse", _createTaskResponseModel);
+        await createModal.Hide();
+    }
+
+    private async Task HideModal(MouseEventArgs arg)
+    {
+        await createModal.Hide();
+    }
+
+}

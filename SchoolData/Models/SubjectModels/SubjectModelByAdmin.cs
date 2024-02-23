@@ -14,7 +14,6 @@ public class SubjectModelByAdmin
     public string? SubjectPhotoUrl { get; set; }
     public List<TaskModel>? Tasks { get; set; }
     public float TotalGrade { get; set; } 
-    public float TotalGetGrade { get; set; } 
     public List<SubjectRequestModel>? Requests { get; set; }
 
     public List<UserSubjectModel>? UserSubjects { get; set; }

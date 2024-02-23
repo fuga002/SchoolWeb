@@ -2,8 +2,6 @@
 @using SchoolClient.Services
 @using SchoolData.Models.TaskModels
 @using System.Text.Json
-@using SchoolData.Models.SubjectModels
-@using System.Net
 @inject HttpService HttpService
 @inject NavigationManager NavigationManager
 <h3>TaskManager</h3>
@@ -52,9 +50,8 @@
                 <TableRowCell>@task.StartDate</TableRowCell>
                 <TableRowCell>@task.EndDate</TableRowCell>
                 <TableRowCell>@task.MaxGrade</TableRowCell>
+                <TableRowCell><button class="btn btn-primary" @onclick="() => Navigate(task.Id)">Responses</button></TableRowCell>
                 <TableRowCell><Button Color="Color.Primary" Clicked="() => ShowEditModal(task)">Edit Task Deatils</Button></TableRowCell>
-                <TableRowCell><Button Color="Color.Primary" Clicked="() => ShowModal(3)">Update photo</Button></TableRowCell>
-                <TableRowCell><Button Color="Color.Primary" Clicked="() => ShowModal(4)">Add teacher</Button></TableRowCell>
                 <TableRowCell></TableRowCell>
             </TableRow>
         }
@@ -118,23 +115,23 @@
             <ModalBody>
                 <Field>
                     <FieldLabel>Title</FieldLabel>
-                    <InputText @bind-Value="@selectedModel.TaskTitle" Placeholder="Task title" />
-                    <ValidationMessage For="@(() => selectedModel.TaskTitle)" />
+                    <InputText @bind-Value="@_updateTaskModel.TaskTitle" Placeholder="Task title" />
+                    <ValidationMessage For="@(() => _updateTaskModel.TaskTitle)" />
                 </Field>
                 <Field>
                     <FieldLabel>Description</FieldLabel>
-                    <InputText @bind-Value="@selectedModel.TaskDescription" Placeholder="Enter description..." />
+                    <InputText @bind-Value="@_updateTaskModel.TaskDescription" Placeholder="Enter description..." />
                     <ValidationMessage For="@(() => _updateTaskModel.TaskDescription)" />
                 </Field>
                 <Field>
                     <FieldLabel>Max grade</FieldLabel>
-                    <InputNumber @bind-Value="@selectedModel.MaxGrade" Placeholder="Max grade" />
+                    <InputNumber @bind-Value="@_updateTaskModel.MaxGrade" Placeholder="Max grade" />
                     <ValidationMessage For="@(() => _updateTaskModel.MaxGrade)" />
                 </Field>
             </ModalBody>
             <ModalFooter>
                 <Button Color="Color.Secondary" Clicked="@HideModal">Close</Button>
-                <Button Color="Color.Primary" Clicked="@OnSave">Save Changes</Button>
+                <Button Color="Color.Primary"  Clicked="@OnSave">Save Changes</Button>
             </ModalFooter>
         </EditForm>
     </ModalContent>
@@ -147,7 +144,6 @@
     readonly CreateTaskModel _createTaskModel = new CreateTaskModel();
     UpdateTaskModel _updateTaskModel = new UpdateTaskModel();
 
-    TaskModel selectedModel = new();
     // reference to the modal component
     private Modal modalRef;
     private Modal editModal;
@@ -156,24 +152,26 @@
     private async Task ShowModal(int id)
     {
         await modalRef.Show();
+        StateHasChanged();
     }
 
     private async Task OnSave()
     {
-        var response = await HttpService.Update($"https://localhost:7251/api/Tasks/{subjectId}", selectedModel);
+        _updateTaskModel.SubjectId = subjectId;
+        var response = await HttpService.Update($"https://localhost:7251/api/Tasks/{subjectId}", _updateTaskModel);
         //await Update(selectedModel);
         await editModal.Hide();
+        StateHasChanged();
     }
     private async Task ShowEditModal(TaskModel model)
     {
-        selectedModel = model;
         await editModal.Show();
+        _updateTaskModel.TaskId = model.Id;
     }
 
-    private Task HideModal()
+    private async Task HideModal()
     {
-
-        return modalRef.Hide();
+        await modalRef.Hide();
     }
 
     private async Task HandleValidSubmit()
@@ -186,20 +184,10 @@
         }*/
         await modalRef.Hide();
     }
-    private async Task HandleValidEdit()
-    {
-
-        var response = await HttpService.Update($"https://localhost:7251/api/Tasks", _updateTaskModel);
-        if (response.StatusCode == HttpStatusCode.OK)
-        {
-            NavigationManager.NavigateTo($"/taskManager/{Uri.EscapeDataString(subjectId.ToString())}");
-        }
-        await modalRef.Hide();
-    }
 
     private void Navigate(int subjectId)
     {
-        NavigationManager.NavigateTo($"/subjectDetails/{Uri.EscapeDataString(subjectId.ToString())}");
+        NavigationManager.NavigateTo($"/responseManager/{Uri.EscapeDataString(subjectId.ToString())}");
     }
 
 }

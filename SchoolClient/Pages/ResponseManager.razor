@@ -1,0 +1,136 @@
+﻿@page "/responseManager/{item}"
+@using SchoolData.Models.TaskModels
+@using SchoolClient.Services
+@using System.Text.Json
+@using SchoolData.StaticServices
+@inject HttpService HttpService
+<h3>PageManager</h3>
+
+@code {
+    
+    [Parameter]
+    public string item { get; set; }
+
+    private string StudentName;
+
+    List<TaskResponseModel> responseModels = new List<TaskResponseModel>();
+    int taskId;
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        taskId = JsonSerializer.Deserialize<int>(Uri.UnescapeDataString(item));
+        if (firstRender)
+        {
+            responseModels = await HttpService.GetEntitiesFromApi<TaskResponseModel>($"https://localhost:7251/api/TaskResponses/GetAllTaskResponse", taskId);
+        }
+        StateHasChanged();
+    }
+
+
+}
+
+
+<Table>
+    <TableHeader ThemeContrast="ThemeContrast.Dark">
+        <TableRow>
+            <TableHeaderCell>#</TableHeaderCell>
+            <TableHeaderCell>Response Text</TableHeaderCell>
+            <TableHeaderCell>Created at</TableHeaderCell>
+            <TableHeaderCell>Status</TableHeaderCell>
+            <TableHeaderCell>Student name</TableHeaderCell>
+            <TableHeaderCell>Task id </TableHeaderCell>
+            <TableHeaderCell>Change status</TableHeaderCell>
+            <TableHeaderCell>Grade it</TableHeaderCell>
+        </TableRow>
+    </TableHeader>
+    <TableBody>
+        @foreach (var response in responseModels)
+        {
+            <TableRow>
+                <TableRowHeader>@response.Id</TableRowHeader>
+                <TableRowCell>@response.ResponseText</TableRowCell>
+                <TableRowCell>@response.CreatedAt</TableRowCell>
+                <TableRowCell>@response.Status</TableRowCell>
+                <TableRowCell>@response.StudentName</TableRowCell>
+                <TableRowCell>@response.TaskId</TableRowCell>
+                @*<TableRowCell><Button Color="Color.Primary" Clicked="() => ShowEditModal(response)">Edit Task Deatils</Button></TableRowCell>*@
+                <TableRowCell><Button Color="Color.Primary" Clicked="() => ShowEditModalStatus(response)">Edit Task Deatils</Button></TableRowCell>
+                <TableRowCell></TableRowCell>
+            </TableRow>
+        }
+    </TableBody>
+</Table>
+
+
+<Modal @ref="editModalStatus">
+    <ModalContent Centered>
+        <EditForm Model="@_updateTaskResponseStatus">
+            <DataAnnotationsValidator />
+            <ModalHeader>
+                <ModalTitle>Add task</ModalTitle>
+                <CloseButton />
+            </ModalHeader>
+            <ModalBody>
+                <Field>
+                    <Select TValue="string" bind-SelectedValue="_updateTaskResponseStatus.Status">
+                        <SelectItem Value="@StaticNames.ResponseAccepted">@StaticNames.ResponseAccepted</SelectItem>
+                        <SelectItem Value="@StaticNames.ResponseDeclined">@StaticNames.ResponseDeclined</SelectItem>
+                    </Select>
+                </Field>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary" Clicked="@HideModal">Close</Button>
+                <Button Color="Color.Primary" Clicked="HandleValidSubmit">Save Changes</Button>
+            </ModalFooter>
+        </EditForm>
+    </ModalContent>
+
+</Modal>
+
+@code {
+
+    readonly UpdateTaskResponseStatus _updateTaskResponseStatus = new UpdateTaskResponseStatus();
+
+    // reference to the modal component
+    private Modal editModal;
+    private Modal editModalStatus;
+
+
+
+    /*private async Task OnSave()
+    {
+        _createTaskResponseModel.TaskId = taskId;
+
+        var response = await HttpService.Update($"https://localhost:7251/api/Tasks/{subjectId}", _updateTaskModel);
+        //await Update(selectedModel);
+        await editModalStatus.Hide();
+        StateHasChanged();
+    }
+    private async Task ShowEditModal(CreateTaskResponseModel model)
+    {
+        await editModalStatus.Show();
+        _createTaskResponseModel. = model.TaskId;
+    }*/
+    private async Task ShowEditModalStatus(TaskResponseModel model)
+    {
+        await editModalStatus.Show();
+        _updateTaskResponseStatus.TaskResponseId = model.Id;
+    }
+
+
+    private async Task HandleValidSubmit()
+    {
+
+        var response = await HttpService.Update($"https://localhost:7251/api/TaskResponses/UpdateTaskResponseStatus/{taskId}", _updateTaskResponseStatus);
+        /*if (response.StatusCode == HttpStatusCode.OK)
+        {
+            NavigationManager.NavigateTo($"/taskManager/{Uri.EscapeDataString(subjectId.ToString())}");
+        }*/
+        await editModal.Hide();
+    }
+
+    private async Task HideModal(MouseEventArgs arg)
+    {
+        await editModalStatus.Hide();
+    }
+
+}

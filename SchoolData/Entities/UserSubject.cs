@@ -10,6 +10,8 @@ public class UserSubject
     [Required]
     public string SubjectStatus { get; set; }
 
+    public float TotalGetGrade { get; set; } = 0;
+
     public Guid UserId { get; set; }
     public virtual User? User { get; set; }
     public int SubjectId { get; set; }

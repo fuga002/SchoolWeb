@@ -7,20 +7,20 @@ using SchoolData.Models.TaskModels;
 
 namespace SchoolClient.Services;
 
-public  class HttpService
+public class HttpService
 {
-     private  readonly HttpClient _httpClient ;
-     private readonly IHttpContextAccessor _httpContextAccessor;
-     private readonly IJSRuntime _jsRuntime;
+    private readonly HttpClient _httpClient;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IJSRuntime _jsRuntime;
 
     public HttpService(IHttpContextAccessor httpContextAccessor, HttpClient httpClient, IJSRuntime jsRuntime)
-     {
-         _httpContextAccessor = httpContextAccessor;
-         _httpClient = httpClient;
-         _jsRuntime = jsRuntime;
-     }
+    {
+        _httpContextAccessor = httpContextAccessor;
+        _httpClient = httpClient;
+        _jsRuntime = jsRuntime;
+    }
 
-    public  async Task<string> AuthorizeApiRequest()
+    public async Task<string> AuthorizeApiRequest()
     {
         string token = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", "token");
         Console.WriteLine(token);
@@ -43,39 +43,43 @@ public  class HttpService
         }
         else
         {
-            return Guid.Empty; 
+            return Guid.Empty;
         }
     }
-    public   async Task<List<T>> GetEntitiesFromApi<T>(string apiUrl,object? obj = null)
+
+    public async Task<List<T>> GetEntitiesFromApi<T>(string apiUrl, object? obj = null)
     {
         using var httpClient = new HttpClient();
         var request = new HttpRequestMessage(HttpMethod.Get, apiUrl);
-        request.Headers.Add("Authorization",await AuthorizeApiRequest());
+        request.Headers.Add("Authorization", await AuthorizeApiRequest());
         if (obj is int)
         {
-           request =  new HttpRequestMessage(HttpMethod.Get, apiUrl+$"/{Convert.ToInt32(obj)}");
-           request.Headers.Add("Authorization", await AuthorizeApiRequest());
+            request = new HttpRequestMessage(HttpMethod.Get, apiUrl + $"/{Convert.ToInt32(obj)}");
+            request.Headers.Add("Authorization", await AuthorizeApiRequest());
         }
+
         HttpResponseMessage response = await httpClient.SendAsync(request);
-        response.EnsureSuccessStatusCode(); 
+        response.EnsureSuccessStatusCode();
 
         string responseBody = await response.Content.ReadAsStringAsync();
         List<T> entities = JsonConvert.DeserializeObject<List<T>>(responseBody) ?? new List<T>();
         Console.WriteLine(response.StatusCode);
         return entities;
     }
-    public   async Task<T> GetEntityFromApi<T>(string apiUrl,object? obj = null) where T : new()
+
+    public async Task<T> GetEntityFromApi<T>(string apiUrl, object? obj = null) where T : new()
     {
         using var httpClient = new HttpClient();
         var request = new HttpRequestMessage(HttpMethod.Get, apiUrl);
-        request.Headers.Add("Authorization",await AuthorizeApiRequest());
+        request.Headers.Add("Authorization", await AuthorizeApiRequest());
         if (obj is int)
         {
-           request =  new HttpRequestMessage(HttpMethod.Get, apiUrl+$"/{Convert.ToInt32(obj)}");
-           request.Headers.Add("Authorization", await AuthorizeApiRequest());
+            request = new HttpRequestMessage(HttpMethod.Get, apiUrl + $"/{Convert.ToInt32(obj)}");
+            request.Headers.Add("Authorization", await AuthorizeApiRequest());
         }
+
         HttpResponseMessage response = await httpClient.SendAsync(request);
-        response.EnsureSuccessStatusCode(); 
+        response.EnsureSuccessStatusCode();
 
         string responseBody = await response.Content.ReadAsStringAsync();
         T entity = JsonConvert.DeserializeObject<T>(responseBody) ?? new T();
@@ -83,7 +87,19 @@ public  class HttpService
         return entity;
     }
 
-
+    public async Task<HttpResponseMessage> UpdatePhoto(string url, IFormFile file)
+    {
+        using var httpClient = new HttpClient();
+        var request = new HttpRequestMessage(HttpMethod.Post, url);
+        var formData = new MultipartFormDataContent();
+        formData.Add(new StreamContent(file.OpenReadStream()), "file", file.Name);
+        var jsonContent = new StringContent(JsonConvert.SerializeObject(formData), Encoding.UTF8, "application/json");
+        request.Content = jsonContent;
+        request.Headers.Add("Authorization", await AuthorizeApiRequest());
+        HttpResponseMessage response = await httpClient.SendAsync(request);
+        response.EnsureSuccessStatusCode();
+        return response;
+    }
 
     public async Task<HttpResponseMessage> Post(string apiUrl, object obj)
     {
@@ -97,7 +113,7 @@ public  class HttpService
 
         string responseBody = await response.Content.ReadAsStringAsync();
         Console.WriteLine(response.StatusCode);
-        return response; 
+        return response;
     }
 
     public async Task<HttpResponseMessage> Update(string apiUrl, object obj)
@@ -112,14 +128,14 @@ public  class HttpService
 
         string responseBody = await response.Content.ReadAsStringAsync();
         Console.WriteLine(response.StatusCode);
-        return response; 
+        return response;
     }
 
     public async Task<List<TaskModel>> GetRelatedTasks(string apiUrl)
     {
         using var httpClient = new HttpClient();
-        var userId =await GetUserId();
-        var request = new HttpRequestMessage(HttpMethod.Post, apiUrl+$"/{userId}"); 
+        var userId = await GetUserId();
+        var request = new HttpRequestMessage(HttpMethod.Post, apiUrl + $"/{userId}");
         var jsonContent = new StringContent(JsonConvert.SerializeObject(userId), Encoding.UTF8, "application/json");
         request.Content = jsonContent;
         request.Headers.Add("Authorization", await AuthorizeApiRequest());
@@ -127,17 +143,18 @@ public  class HttpService
         response.EnsureSuccessStatusCode();
 
         string responseBody = await response.Content.ReadAsStringAsync();
-        List<TaskModel> entities = JsonConvert.DeserializeObject<List<TaskModel>>(responseBody) ?? new List<TaskModel>();
+        List<TaskModel> entities =
+            JsonConvert.DeserializeObject<List<TaskModel>>(responseBody) ?? new List<TaskModel>();
         Console.WriteLine(response.StatusCode);
         return entities;
     }
 
 
-    public  async Task<UserModel> LogIn(string apiUrl, LoginUserModel entityToSend)
+    public async Task<UserModel> LogIn(string apiUrl, LoginUserModel entityToSend)
     {
-
         using var httpClient = new HttpClient();
-        var jsonContent = new StringContent(JsonConvert.SerializeObject(entityToSend), Encoding.UTF8, "application/json");
+        var jsonContent =
+            new StringContent(JsonConvert.SerializeObject(entityToSend), Encoding.UTF8, "application/json");
         HttpResponseMessage response = await httpClient.PostAsync(apiUrl, jsonContent);
 
         response.EnsureSuccessStatusCode();
@@ -152,7 +169,7 @@ public  class HttpService
         }
 
         await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "token", token);
-        var userModel =  await GetProfile();
+        var userModel = await GetProfile();
         return userModel;
     }
 

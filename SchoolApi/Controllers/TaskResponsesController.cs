@@ -6,7 +6,7 @@ using SchoolData.Models.TaskModels;
 
 namespace SchoolApi.Controllers;
 
-[Route("api/[controller]/{taskId}")]
+[Route("api/[controller]/[action]")]
 [ApiController]
 public class TaskResponsesController : ControllerBase
 {
@@ -19,7 +19,7 @@ public class TaskResponsesController : ControllerBase
         _userProvider = userProvider;
     }
 
-    [HttpGet]
+    [HttpGet("{taskId}")]
     public async Task<IActionResult> GetAllTaskResponse(int taskId)
     {
         return Ok(await _taskResponseManager.GetAllTaskResponse(taskId));

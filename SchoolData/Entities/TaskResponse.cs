@@ -14,6 +14,7 @@ public class TaskResponse
 
     public string Status { get; set; }
 
+    public string StudentName { get; set; }
 
     [ForeignKey("UserId")]
     public Guid UserId { get; set; }

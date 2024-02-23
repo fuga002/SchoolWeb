@@ -8,6 +8,7 @@
 
 @code
 {
+    int subjectId;
     List<SubjectModelByAdmin> subjects = new List<SubjectModelByAdmin>();
     List<TaskModel> tasks = new List<TaskModel>();
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -45,9 +46,9 @@
                 <TableRowCell>@subject.SubjectDescription</TableRowCell>
                 <TableRowCell>@subject.TotalGrade.ToString()</TableRowCell>
                 <TableRowCell><button class="btn btn-primary" @onclick="() => Navigate(subject.Id)">Tasks</button></TableRowCell>
-                <TableRowCell><Button Color="Color.Primary" Clicked="() => ShowModal(2)">Edit Subject</Button></TableRowCell>
-                <TableRowCell><Button Color="Color.Primary" Clicked="() => ShowModal(3)">Update photo</Button></TableRowCell>
-                <TableRowCell><Button Color="Color.Primary" Clicked="() => ShowModal(4)">Add teacher</Button></TableRowCell>
+                <TableRowCell><Button Color="Color.Primary" Clicked="() => ShowModal(2,subject)">Edit Subject</Button></TableRowCell>
+                <TableRowCell><Button Color="Color.Primary" Clicked="() => ShowModal(3,subject)">Update photo</Button></TableRowCell>
+                <TableRowCell><Button Color="Color.Primary" Clicked="() => ShowModal(4,subject)">Add teacher</Button></TableRowCell>
                 <TableRowCell></TableRowCell>
             </TableRow>
         }
@@ -106,11 +107,6 @@
             </ModalHeader>
             <ModalBody>
                 <Field>
-                    <FieldLabel>Subject id</FieldLabel>
-                    <InputNumber @bind-Value="@_updateSubject.SubjectId" Placeholder="Subject Id"/>
-                    <ValidationMessage For="@(() => _updateSubject.SubjectId)" />
-                </Field>
-                <Field>
                     <FieldLabel>Name</FieldLabel>
                     <InputText @bind-Value="@_updateSubject.SubjectName" Placeholder="Enter name..."/>
                     <ValidationMessage For="@(() => _updateSubject.SubjectName)" />
@@ -140,11 +136,6 @@
         </ModalHeader>
         <ModalBody>
             <Field>
-                <FieldLabel>Subject id</FieldLabel>
-                <InputNumber @bind-Value="@_updatePhotoModel.SubjectId" Placeholder="Subject Id"/>
-                <ValidationMessage For="@(() => _updatePhotoModel.SubjectId)" />
-            </Field>
-            <Field>
                 <FieldLabel>Name</FieldLabel>
                 <InputFile @bind-Value="@_updatePhotoModel.File" Placeholder="Photo file"/>
                 <ValidationMessage For="@(() => _updatePhotoModel.File)" />
@@ -168,11 +159,6 @@
             <CloseButton/>
         </ModalHeader>
         <ModalBody>
-            <Field>
-                <FieldLabel>Subject id</FieldLabel>
-                <InputNumber @bind-Value="@_addTeacherModel.SubjectId" Placeholder="Subject Id"/>
-                <ValidationMessage For="@(() => _addTeacherModel.SubjectId)" />
-            </Field>
             <Field>
                 <FieldLabel>Name</FieldLabel>
                 <InputText @bind-Value="@_addTeacherModel.TeacherUsername" Placeholder="Teacher username"/>
@@ -201,8 +187,12 @@
     private Modal modalRef2;
     private Modal modalRef3;
 
-    private Task ShowModal(int i)
+    private Task ShowModal(int i,SubjectModelByAdmin? model = null)
     {
+        if (model != null)
+        {
+            subjectId = model.Id;
+        }
         switch (i)
         {
             case 1: return modalRef.Show();
@@ -211,7 +201,7 @@
                 case 4: return modalRef3.Show();
                 default: return modalRef.Show();
         }
-        
+
     }
 
     private Task HideModal()
@@ -232,7 +222,7 @@
     }
     private async Task HandleValidEdit()
     {
-
+        _updateSubject.SubjectId = subjectId;
         var response = await HttpService.Update($"https://localhost:7251/{_updateSubject.SubjectId}", _updateSubject);
         if (response.StatusCode == HttpStatusCode.OK)
         {
@@ -242,8 +232,8 @@
     }
     private async Task HandleValidAddTeacher()
     {
-
-        var response = await HttpService.Update($"https://localhost:7251/api/Subjects/addTeacher", _addTeacherModel);
+        _addTeacherModel.SubjectId = subjectId;
+        var response = await HttpService.Update($"https://localhost:7251/api/Subjects/addTeacher/{subjectId}", _addTeacherModel);
         if (response.StatusCode == HttpStatusCode.OK)
         {
             NavigationManager.NavigateTo("/subjects");
@@ -252,12 +242,15 @@
     }
     private async Task HandleValidEditPhoto()
     {
-
-        var response = await HttpService.Update($"https://localhost:7251/api/Subjects/updatePhoto/{_updatePhotoModel.SubjectId}", _addTeacherModel);
+        _updatePhotoModel.SubjectId = subjectId;
+        var response = await HttpService.UpdatePhoto($"https://localhost:7251/api/Subjects/updatePhoto/{_updatePhotoModel.SubjectId}", _updatePhotoModel.File);
         if (response.StatusCode == HttpStatusCode.OK)
         {
             NavigationManager.NavigateTo("/subjects");
+
         }
+
+        Console.WriteLine(response.StatusCode);
         await modalRef.Hide();
     }
 

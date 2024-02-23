@@ -12,6 +12,7 @@ public class TaskResponseModel
 
 
     public Guid UserId { get; set; }
+    public string StudentName { get; set; }
     public UserModel? User { get; set; }
     public int TaskId { get; set; }
 }
