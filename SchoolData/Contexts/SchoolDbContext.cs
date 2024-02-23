@@ -31,6 +31,5 @@ public class SchoolDbContext:DbContext
     public DbSet<Role> Roles { get; set; }
     public DbSet<Task> Tasks { get; set; }
     public DbSet<TaskResponse> TaskResponses { get; set; }
-    public DbSet<TaskResponseStatus> TaskResponsesStatus { get; set; }
     public DbSet<TaskResponseResult> TaskResponsesResult { get; set; }
 }

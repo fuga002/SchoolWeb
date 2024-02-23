@@ -29,10 +29,10 @@
             <TableHeaderCell>Subject name</TableHeaderCell>
             <TableHeaderCell>Subject description</TableHeaderCell>
             <TableHeaderCell>Total grade</TableHeaderCell>
-            <TableHeaderCell>Total tasks count</TableHeaderCell>
+            <TableHeaderCell>Tasks</TableHeaderCell>    
             <TableHeaderCell>Edit subject</TableHeaderCell>
             <TableHeaderCell>Edit subject photo</TableHeaderCell>
-            <TableHeaderCell>Add teacher to subject</TableHeaderCell>   
+            <TableHeaderCell>Add teacher to subject</TableHeaderCell> 
             <TableHeaderCell><Button Color="Color.Primary" Clicked="() => ShowModal(1)">Create subject</Button></TableHeaderCell>
         </TableRow>
     </TableHeader>
@@ -42,9 +42,9 @@
             <TableRow>
                 <TableRowHeader>@subject.Id</TableRowHeader>
                 <TableRowCell>@subject.SubjectName</TableRowCell>
-                <TableRowCell>@subject.SubjectDescription</TableRowCell>]]][]
+                <TableRowCell>@subject.SubjectDescription</TableRowCell>
                 <TableRowCell>@subject.TotalGrade.ToString()</TableRowCell>
-                <TableRowCell>@subject.Tasks.Count</TableRowCell>
+                <TableRowCell><button class="btn btn-primary" @onclick="() => Navigate(subject.Id)">Tasks</button></TableRowCell>
                 <TableRowCell><Button Color="Color.Primary" Clicked="() => ShowModal(2)">Edit Subject</Button></TableRowCell>
                 <TableRowCell><Button Color="Color.Primary" Clicked="() => ShowModal(3)">Update photo</Button></TableRowCell>
                 <TableRowCell><Button Color="Color.Primary" Clicked="() => ShowModal(4)">Add teacher</Button></TableRowCell>
@@ -262,6 +262,9 @@
     }
 
 
-
+    private void Navigate(int subjectId)
+    {
+        NavigationManager.NavigateTo($"/taskManager/{Uri.EscapeDataString(subjectId.ToString())}");
+    }
 
 }

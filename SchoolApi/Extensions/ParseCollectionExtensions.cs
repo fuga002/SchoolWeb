@@ -75,7 +75,7 @@ public static class ParseCollectionExtensions
         return taskResponse.Adapt<TaskResponseModel>();
     }
 
-    public static List<TaskResponseModel> ParseList(List<TaskResponse>? responses)
+    public static List<TaskResponseModel> ParseList(this List<TaskResponse>? responses)
     {
         if (responses == null || responses.Count == 0)
         {

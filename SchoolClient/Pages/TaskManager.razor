@@ -1,0 +1,201 @@
+﻿@page "/taskManager/{item}"
+@using SchoolClient.Services
+@using SchoolData.Models.TaskModels
+@using System.Text.Json
+@using SchoolData.Models.SubjectModels
+@using System.Net
+@inject HttpService HttpService
+@inject NavigationManager NavigationManager
+<h3>TaskManager</h3>
+
+@code {
+    [Parameter]
+    public string item { get; set; }
+
+    List<TaskModel> taskModels = new List<TaskModel>();
+    int subjectId;
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+         subjectId = JsonSerializer.Deserialize<int>(Uri.UnescapeDataString(item));
+        if (firstRender)
+        {
+            taskModels = await HttpService.GetEntitiesFromApi<TaskModel>("https://localhost:7251/api/Tasks", subjectId);
+        }
+        StateHasChanged();
+    }
+}
+
+
+<Table>
+    <TableHeader ThemeContrast="ThemeContrast.Dark">
+        <TableRow>
+            <TableHeaderCell>#</TableHeaderCell>
+            <TableHeaderCell>Task title</TableHeaderCell>
+            <TableHeaderCell>Task description</TableHeaderCell>
+            <TableHeaderCell>Total status</TableHeaderCell>
+            <TableHeaderCell>Start date</TableHeaderCell>
+            <TableHeaderCell>End date</TableHeaderCell>
+            <TableHeaderCell>Max grade</TableHeaderCell>
+            <TableHeaderCell>Task responses</TableHeaderCell>
+            <TableHeaderCell><Button Color="Color.Primary" Clicked="() => ShowModal(1)">Create task</Button></TableHeaderCell>
+        </TableRow>
+    </TableHeader>
+    <TableBody>
+        @foreach (var task in taskModels)
+        {
+            <TableRow>
+                <TableRowHeader>@task.Id</TableRowHeader>
+                <TableRowCell>@task.TaskTitle</TableRowCell>
+                <TableRowCell>@task.TaskDescription</TableRowCell>
+                <TableRowCell>@task.TaskStatus</TableRowCell>
+                <TableRowCell>@task.StartDate</TableRowCell>
+                <TableRowCell>@task.EndDate</TableRowCell>
+                <TableRowCell>@task.MaxGrade</TableRowCell>
+                <TableRowCell><button class="btn btn-primary" @onclick="() => Navigate(task.Id)">Login</button></TableRowCell>
+                <TableRowCell><Button Color="Color.Primary" Clicked="() => ShowModal(2)">Edit Subject</Button></TableRowCell>
+                <TableRowCell><Button Color="Color.Primary" Clicked="() => ShowModal(3)">Update photo</Button></TableRowCell>
+                <TableRowCell><Button Color="Color.Primary" Clicked="() => ShowModal(4)">Add teacher</Button></TableRowCell>
+                <TableRowCell></TableRowCell>
+            </TableRow>
+        }
+    </TableBody>
+</Table>
+
+                
+                
+<Modal @ref="modalRef">
+    <ModalContent Centered>
+        <EditForm Model="@_createTaskModel" OnValidSubmit="HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <ModalHeader>
+                <ModalTitle>Add subject</ModalTitle>
+                <CloseButton/>
+            </ModalHeader>
+            <ModalBody>
+                <Field>
+                    <FieldLabel>Title</FieldLabel>
+                    <InputText @bind-Value="@_createTaskModel.TaskTitle" Placeholder="Task title"/>
+                    <ValidationMessage For="@(() => _createTaskModel.TaskTitle)" />
+                </Field>
+                <Field>
+                    <FieldLabel>Description</FieldLabel>
+                    <InputText @bind-Value="@_createTaskModel.TaskDescription" Placeholder="Enter description..."/>
+                    <ValidationMessage For="@(() => _createTaskModel.TaskDescription)" />
+                </Field>
+                <Field>
+                    <FieldLabel>Start date</FieldLabel>
+                    <InputDate @bind-Value="@_createTaskModel.StartDate" Placeholder="Start date" />
+                    <ValidationMessage For="@(() => _createTaskModel.StartDate)" />
+                </Field>
+                <Field>
+                    <FieldLabel>End date</FieldLabel>
+                    <InputDate @bind-Value="@_createTaskModel.EndDate" Placeholder="End date" />
+                    <ValidationMessage For="@(() => _createTaskModel.EndDate)" />
+                </Field>
+                <Field>
+                    <FieldLabel>Max grade</FieldLabel>
+                    <InputNumber @bind-Value="@_createTaskModel.MaxGrade" Placeholder="Max grade" />
+                    <ValidationMessage For="@(() => _createTaskModel.MaxGrade)" />
+                </Field>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary" OnClick="@HideModal">Close</Button>
+                <Button Color="Color.Primary"  Type="ButtonType.Submit" >Save Changes</Button>
+            </ModalFooter>
+        </EditForm>
+    </ModalContent>
+
+</Modal>       
+
+<Modal @ref="modalRef1">
+    <ModalContent Centered>
+        <EditForm Model="@_createTaskModel" OnValidSubmit="HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <ModalHeader>
+                <ModalTitle>Add subject</ModalTitle>
+                <CloseButton/>
+            </ModalHeader>
+            <ModalBody>
+                <Field>
+                    <FieldLabel>Title</FieldLabel>
+                    <InputText @bind-Value="@_createTaskModel.TaskTitle" Placeholder="Task title"/>
+                    <ValidationMessage For="@(() => _createTaskModel.TaskTitle)" />
+                </Field>
+                <Field>
+                    <FieldLabel>Description</FieldLabel>
+                    <InputText @bind-Value="@_createTaskModel.TaskDescription" Placeholder="Enter description..."/>
+                    <ValidationMessage For="@(() => _createTaskModel.TaskDescription)" />
+                </Field>
+                <Field>
+                    <FieldLabel>Start date</FieldLabel>
+                    <InputDate @bind-Value="@_createTaskModel.StartDate" Placeholder="Start date" />
+                    <ValidationMessage For="@(() => _createTaskModel.StartDate)" />
+                </Field>
+                <Field>
+                    <FieldLabel>End date</FieldLabel>
+                    <InputDate @bind-Value="@_createTaskModel.EndDate" Placeholder="End date" />
+                    <ValidationMessage For="@(() => _createTaskModel.EndDate)" />
+                </Field>
+                <Field>
+                    <FieldLabel>Max grade</FieldLabel>
+                    <InputNumber @bind-Value="@_createTaskModel.MaxGrade" Placeholder="Max grade" />
+                    <ValidationMessage For="@(() => _createTaskModel.MaxGrade)" />
+                </Field>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary" OnClick="@HideModal">Close</Button>
+                <Button Color="Color.Primary"  Type="ButtonType.Submit" >Save Changes</Button>
+            </ModalFooter>
+        </EditForm>
+    </ModalContent>
+
+</Modal>
+
+                    
+@code {
+
+    CreateTaskModel _createTaskModel = new CreateTaskModel();
+    UpdateTaskModel _updateTaskModel = new UpdateTaskModel();
+
+    // reference to the modal component
+    private Modal modalRef;
+    private Modal modalRef1;
+    private Modal modalRef2;
+    private Modal modalRef3;
+
+    private Task ShowModal(int i)
+    {
+        switch (i)
+        {
+            case 1: return modalRef.Show();
+            case 2: return modalRef1.Show();
+            case 3: return modalRef2.Show();
+            case 4: return modalRef3.Show();
+            default: return modalRef.Show();
+        }
+
+    }
+
+    private Task HideModal()
+    {
+
+        return modalRef.Hide();
+    }
+
+    private async Task HandleValidSubmit()
+    {
+
+        var response = await HttpService.Post($"https://localhost:7251/api/Tasks/{subjectId}", _createTaskModel);
+        if (response.StatusCode == HttpStatusCode.OK)
+        {
+            NavigationManager.NavigateTo("/subjects");
+        }
+        await modalRef.Hide();
+    }
+
+    private void Navigate(int subjectId)
+    {
+        NavigationManager.NavigateTo($"/subjectDetails/{Uri.EscapeDataString(subjectId.ToString())}");
+    }
+
+}

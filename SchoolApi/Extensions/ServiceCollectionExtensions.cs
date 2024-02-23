@@ -45,12 +45,14 @@ public static  class ServiceCollectionExtensions
         services.AddScoped<IUserSubjectRepository, UserSubjectRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<ITaskRepository, TaskRepository>();
+        services.AddScoped<ITaskResponseRepository, TaskResponseRepository>();
 
         services.AddScoped<SubjectManager>();
         services.AddScoped<SubjectRequestManager>();
         services.AddScoped<JwtTokenManager>();
         services.AddScoped<UserManager>();
         services.AddScoped<TaskManager>();
+        services.AddScoped<TaskResponseManager>();
 
         services.AddScoped<UserProvider>();
 

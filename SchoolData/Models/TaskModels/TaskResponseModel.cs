@@ -14,5 +14,4 @@ public class TaskResponseModel
     public Guid UserId { get; set; }
     public UserModel? User { get; set; }
     public int TaskId { get; set; }
-    public TaskModel? Task { get; set; }
 }
