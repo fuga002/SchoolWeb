@@ -229,4 +229,10 @@ public class HttpService
     {
         return Guid.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier)!);
     }
+
+    public async Task LogoutAsync()
+    {
+        await _jsRuntime.InvokeVoidAsync("localStorage.removeItem", await GetJwtToken());
+        await _jsRuntime.InvokeVoidAsync("localStorage.removeItem", await GetUserId());
+    }
 }

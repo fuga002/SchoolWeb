@@ -2,6 +2,7 @@
 @using SchoolData.Models
 @using Newtonsoft.Json
 @using System.Text
+@using SchoolData.StaticServices
 
 
 <h3 class="text-center mb-4">Register User</h3>
@@ -47,31 +48,12 @@
                 </div>
                 <div class="input-box">
                     <label for="userRole">User Role</label>
-                    <InputSelect id="userRole" class="form-control" @bind-Value="userModel.UserRole">
-                        <option value="Admin">Admin</option>
-                        <option value="User">User</option>
-                    </InputSelect>
+                        <Select TValue="string" @bind-SelectedValue="@userModel.UserRole">
+                            <SelectItem Value="@StaticNames.StudentRole">@StaticNames.StudentRole</SelectItem>
+                            <SelectItem Value="@StaticNames.TeacherRole">@StaticNames.TeacherRole</SelectItem>
+                            <SelectItem Value="@StaticNames.AdminRole">@StaticNames.AdminRole</SelectItem>
+                        </Select>
                     <ValidationMessage For="@(() => userModel.UserRole)"/>
-                </div>
-            </div>
-            <div class="gender-details">
-                <input type="radio" name="gender" id="dot-1">
-                <input type="radio" name="gender" id="dot-2">
-                <input type="radio" name="gender" id="dot-3">
-                <span class="gender-title">Gender</span>
-                <div class="category">
-                    <label for="dot-1">
-                        <span class="dot one"></span>
-                        <span class="gender">Male</span>
-                    </label>
-                    <label for="dot-2">
-                        <span class="dot two"></span>
-                        <span class="gender">Female</span>
-                    </label>
-                    <label for="dot-3">
-                        <span class="dot three"></span>
-                        <span class="gender">Prefer not to say</span>
-                    </label>
                 </div>
             </div>
             <div class="button">
@@ -106,4 +88,4 @@
         }
     }
 }
-}
+

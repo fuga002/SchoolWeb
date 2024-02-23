@@ -1,6 +1,7 @@
 ﻿@using SchoolClient.Services
 @using System.Security.Claims
 @using SchoolClient.Pages
+@using SchoolData.Models
 @using SchoolData.StaticServices
 @inject NavigationManager NavigationManager
 @inject HttpService HttpService
@@ -8,6 +9,7 @@
 @code{
 
     string? userRole;
+    UserModel userModel = new UserModel();
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -16,6 +18,7 @@
             var claims = await HttpService.GetClaims();
             var role = claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)!.Value;
             userRole = await HttpService.GetUserRole();
+            userModel = await HttpService.GetProfile();
             StateHasChanged();
 
         }
@@ -49,8 +52,8 @@
     <div class="offcanvas-body">
         <div>
             <div>
-                <img class="image-part" src="https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png" alt="">
-                <p>user</p>
+                <img class="image-part" src="user.png" alt="">
+                <p>@userModel.Firstname  @userModel.Lastname</p>
             </div>
             @switch (userRole)
             {
@@ -81,7 +84,6 @@
                         <button class="btn btn-primary" @onclick="() => Navigate(SubjectManager)">Subject Manager</button>
                         <br/>
                         <button class="btn btn-primary" @onclick="() => Navigate(Register)">Register Account</button>
-                
                     </div>
                     break;
                 }

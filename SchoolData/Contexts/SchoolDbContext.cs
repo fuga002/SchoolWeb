@@ -12,13 +12,18 @@ public class SchoolDbContext:DbContext
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        /*modelBuilder.Entity<User>().HasData(new User()
+        modelBuilder.Entity<User>().HasData(new User
         {
-            Id = 1,
+            Id = Guid.NewGuid(),
             FirstName = "Maruf",
             LastName = "Berdiev",
-            UserName = "fuga_02"
-        });*/
+            UserName = "fuga_02",
+            PasswordHash = "password123",
+            BornDate = "2002-31-10",
+            UserRole = "Admin",
+            CreatedDateTime = DateTime.Now
+        
+        });
     }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
