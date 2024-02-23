@@ -114,13 +114,14 @@
     {
         await editModalStatus.Show();
         _updateTaskResponseStatus.TaskResponseId = model.Id;
+        StateHasChanged();
     }
 
 
     private async Task HandleValidSubmit()
     {
 
-        var response = await HttpService.Update($"https://localhost:7251/api/TaskResponses/UpdateTaskResponseStatus/{taskId}", _updateTaskResponseStatus);
+        var response = await HttpService.Update($"https://localhost:7251/api/TaskResponses/UpdateTaskResponseStatus", _updateTaskResponseStatus);
         /*if (response.StatusCode == HttpStatusCode.OK)
         {
             NavigationManager.NavigateTo($"/taskManager/{Uri.EscapeDataString(subjectId.ToString())}");

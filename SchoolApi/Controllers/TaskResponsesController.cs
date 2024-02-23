@@ -45,7 +45,7 @@ public class TaskResponsesController : ControllerBase
         return Ok(await _taskResponseManager.AddTaskResponse(model, userId));
     }
 
-    [HttpPut("{taskResponseId}")]
+    [HttpPut]
     public async Task<IActionResult> UpdateTaskResponseStatus(UpdateTaskResponseStatus model)
     {
         return Ok(await _taskResponseManager.UpdateTaskResponseStatusByAdmin(model));
