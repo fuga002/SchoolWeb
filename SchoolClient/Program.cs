@@ -1,6 +1,5 @@
 using Blazorise;
 using Blazorise.Bootstrap;
-using Microsoft.JSInterop;
 using SchoolClient.Data;
 using SchoolClient.Services;
 
@@ -12,7 +11,6 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<HttpService>();
-builder.Services.AddSingleton<IJSRuntime, JSRuntime>();
 builder.Services.AddHttpClient();
 builder.Services
     .AddBlazorise(options =>

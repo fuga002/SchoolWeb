@@ -2,20 +2,16 @@
 @using SchoolData.Models
 @using SchoolClient.Services
 @inject HttpService HttpService
-@inject JSRuntime JsRuntime
 <h3><b>Profile</b></h3>
 
 @code {
     UserModel _userModel = new UserModel();
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        string token = await JsRuntime.InvokeAsync<string>("localStorage.getItem", "token");
         if (firstRender)
         {
-            if (string.IsNullOrWhiteSpace(token))
-            {
                 _userModel = await HttpService.GetProfile();
-            }
+            
         }
     }
 }
